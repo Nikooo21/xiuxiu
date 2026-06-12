@@ -9,8 +9,13 @@
     <style>
         :root {
             --primary: #165DFF;
+            --primary-light: #e8f1ff;
+            --success: #00b42a;
+            --warning: #ff7d00;
+            --danger: #f53f3f;
             --light-bg: #f5f7fa;
-            --card-shadow: 0 4px 18px rgba(22, 93, 255, 0.1);
+            --card-shadow: 0 4px 18px rgba(22, 93, 255, 0.12);
+            --card-hover-shadow: 0 12px 32px rgba(22, 93, 255, 0.2);
             --text-muted: #6c757d;
         }
         body {
@@ -31,21 +36,59 @@
             margin: 25px 0;
             box-shadow: 0 6px 20px rgba(22,93,255,0.2);
         }
-        /* 首页课程卡片 两列布局 */
+        /* 首页课程卡片 强化样式 */
         .course-card-home {
             background: #fff;
-            border-radius: 14px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
-            padding: 20px;
+            padding: 24px;
             height: 100%;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border-left: 5px solid transparent;
         }
         .course-card-home:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(22,93,255,0.18);
-            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: var(--card-hover-shadow);
+            border-left-color: var(--primary);
+        }
+        .course-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        .tag-diff {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-right: 6px;
+        }
+        .tag-basic {
+            background: #e8f1ff;
+            color: var(--primary);
+        }
+        .tag-middle {
+            background: #fff7e8;
+            color: var(--warning);
+        }
+        .tag-hard {
+            background: #fee;
+            color: var(--danger);
+        }
+        .course-desc {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .course-meta {
+            font-size: 13px;
+            color: var(--text-muted);
         }
         /* 课程详情容器 */
         .course-detail {
@@ -55,9 +98,9 @@
         /* 章节模块 */
         .chapter-item {
             background: #fff;
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .chapter-title {
@@ -68,12 +111,30 @@
         }
         .chapter-content {
             display: none;
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 18px;
+            padding-top: 18px;
             border-top: 1px solid #eee;
         }
         .chapter-content.active {
             display: block;
+        }
+        .knowledge-block {
+            background: #f8faff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .exercise-block {
+            background: #fefbf3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .think-block {
+            background: #f3f8ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
         }
         /* 代码练习区 */
         .practice-box {
@@ -104,12 +165,12 @@
         /* 标签样式 */
         .tag {
             display: inline-block;
-            background: #e8f1ff;
+            background: var(--primary-light);
             color: var(--primary);
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 20px;
             font-size: 13px;
-            margin: 3px;
+            margin: 4px;
         }
         /* 进度条 */
         .progress {
@@ -123,6 +184,10 @@
         .back-btn {
             margin-bottom: 20px;
         }
+        h6 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -132,7 +197,7 @@
             <a class="navbar-brand fw-bold text-primary fs-5" href="#" onclick="showHome()">
                 <i class="bi bi-bar-chart-line-fill me-2"></i>樊珍秀 学习平台
             </a>
-            <span class="text-muted">广东科学技术职业学院 · 商务数据分析与应用</span>
+            <span class="text-muted">广东科学技术职业学院 · 商务数据分析与应用专业</span>
         </div>
     </nav>
 
@@ -141,121 +206,261 @@
         <div class="hero">
             <h3 class="fw-bold">樊珍秀 👋</h3>
             <p class="mb-1">商学院 | 商务数据分析与应用专业</p>
-            <p class="opacity-90">专业课程学习 · 知识点练习 · 代码实操平台</p>
+            <p class="opacity-90">专业课程学习 · 全维度知识点梳理 · 在线代码实操练习平台</p>
         </div>
 
-        <!-- ========== 首页：两列课程卡片列表（默认显示） ========== -->
+        <!-- ========== 首页：两列课程卡片列表（强化版） ========== -->
         <div id="home-page">
-            <h4 class="fw-bold mb-4"><i class="bi bi-grid-fill text-primary me-2"></i>全部课程（点击卡片进入学习）</h4>
+            <h4 class="fw-bold mb-4"><i class="bi bi-grid-fill text-primary me-2"></i>全部课程（点击卡片进入对应课程学习）</h4>
             <div class="row g-4">
-                <!-- 第一行 左 -->
+                <!-- 第一行 左：Python基础 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(1)">
-                        <h5 class="fw-bold">1. Python基础</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-primary-light text-primary">
+                                <i class="bi bi-code"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-basic">入门</span>
+                                <span class="tag-diff">必修</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">1. Python基础</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:40%"></div>
                         </div>
-                        <small class="text-muted">学习进度：40% | 10个章节 · 代码练习</small>
-                        <p class="mt-2 mb-0 text-secondary">Python编程语法、基础数据结构、函数与文件操作</p>
+                        <small class="text-muted">整体学习进度：40%</small>
+                        <p class="course-desc">零基础学习Python编程语言，掌握变量、分支、循环、函数、文件操作等核心语法，是数据分析必备基础工具。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>代码实操为主
+                        </div>
                     </div>
                 </div>
-                <!-- 第一行 右 -->
+                <!-- 第一行 右：数据分析技术 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(2)">
-                        <h5 class="fw-bold">2. 数据分析技术</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-warning-subtle text-warning">
+                                <i class="bi bi-bar-chart"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-middle">中等</span>
+                                <span class="tag-diff">必修</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">2. 数据分析技术</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:30%"></div>
                         </div>
-                        <small class="text-muted">学习进度：30% | 10个章节 · 案例练习</small>
-                        <p class="mt-2 mb-0 text-secondary">统计分析、数据清洗、分析方法论、报告撰写</p>
+                        <small class="text-muted">整体学习进度：30%</small>
+                        <p class="course-desc">系统学习数据分析完整流程，包含数据清洗、统计分析、各类分析模型、商业分析方法论与专业报告撰写。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>案例+计算练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第二行 左 -->
+                <!-- 第二行 左：数据采集与处理 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(3)">
-                        <h5 class="fw-bold">3. 数据采集与处理</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-danger-subtle text-danger">
+                                <i class="bi bi-download"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-hard">进阶</span>
+                                <span class="tag-diff">必修</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">3. 数据采集与处理</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:20%"></div>
                         </div>
-                        <small class="text-muted">学习进度：20% | 10个章节 · 爬虫练习</small>
-                        <p class="mt-2 mb-0 text-secondary">网页采集、数据解析、正则、批量数据预处理</p>
+                        <small class="text-muted">整体学习进度：20%</small>
+                        <p class="course-desc">学习多渠道数据获取方式，重点掌握网页爬虫、正则表达式、数据规整、批量预处理等实战技能。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>爬虫代码练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第二行 右 -->
+                <!-- 第二行 右：供应链数据分析 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(4)">
-                        <h5 class="fw-bold">4. 供应链数据分析</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-success-subtle text-success">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-middle">中等</span>
+                                <span class="tag-diff">专业方向</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">4. 供应链数据分析</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:25%"></div>
                         </div>
-                        <small class="text-muted">学习进度：25% | 10个章节 · 业务分析</small>
-                        <p class="mt-2 mb-0 text-secondary">采购、仓储、物流、库存与供应链风险分析</p>
+                        <small class="text-muted">整体学习进度：25%</small>
+                        <p class="course-desc">结合供应链业务场景，学习采购、仓储、物流、库存四大模块数据分析，掌握行业核心指标与风险研判。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>业务案例练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第三行 左 -->
+                <!-- 第三行 左：数据库原理与应用 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(5)">
-                        <h5 class="fw-bold">5. 数据库原理与应用</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-primary-light text-primary">
+                                <i class="bi bi-database"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-basic">入门</span>
+                                <span class="tag-diff">必修</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">5. 数据库原理与应用</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:35%"></div>
                         </div>
-                        <small class="text-muted">学习进度：35% | 10个章节 · SQL练习</small>
-                        <p class="mt-2 mb-0 text-secondary">MySQL基础、数据表设计、增删改查、多表查询</p>
+                        <small class="text-muted">整体学习进度：35%</small>
+                        <p class="course-desc">讲解关系型数据库基础、数据表设计规范，熟练使用SQL语句完成增删改查、多表关联、聚合统计等操作。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>SQL代码练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第三行 右 -->
+                <!-- 第三行 右：Excel高级数据应用 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(6)">
-                        <h5 class="fw-bold">6. Excel高级数据应用</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-warning-subtle text-warning">
+                                <i class="bi bi-table"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-basic">入门</span>
+                                <span class="tag-diff">必修</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">6. Excel高级数据应用</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:50%"></div>
                         </div>
-                        <small class="text-muted">学习进度：50% | 10个章节 · 函数练习</small>
-                        <p class="mt-2 mb-0 text-secondary">高级函数、数据透视表、动态图表、商务报表</p>
+                        <small class="text-muted">整体学习进度：50%</small>
+                        <p class="course-desc">突破基础Excel用法，精通各类函数、数据透视表、条件格式、动态图表，制作专业商务数据报表。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>函数与报表练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第四行 左 -->
+                <!-- 第四行 左：统计学基础 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(7)">
-                        <h5 class="fw-bold">7. 统计学基础</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-danger-subtle text-danger">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-middle">中等</span>
+                                <span class="tag-diff">基础理论</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">7. 统计学基础</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:30%"></div>
                         </div>
-                        <small class="text-muted">学习进度：30% | 10个章节 · 计算练习</small>
-                        <p class="mt-2 mb-0 text-secondary">描述统计、概率、分布、抽样与假设检验</p>
+                        <small class="text-muted">整体学习进度：30%</small>
+                        <p class="course-desc">数据分析核心理论基础，学习描述统计、概率分布、抽样、参数估计与假设检验，支撑高阶数据分析。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>数理计算练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第四行 右 -->
+                <!-- 第四行 右：数据可视化设计 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(8)">
-                        <h5 class="fw-bold">8. 数据可视化设计</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-success-subtle text-success">
+                                <i class="bi bi-pie-chart"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-middle">中等</span>
+                                <span class="tag-diff">实操课程</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">8. 数据可视化设计</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:28%"></div>
                         </div>
-                        <small class="text-muted">学习进度：28% | 10个章节 · 绘图练习</small>
-                        <p class="mt-2 mb-0 text-secondary">图表选型、Python绘图、数据看板设计</p>
+                        <small class="text-muted">整体学习进度：28%</small>
+                        <p class="course-desc">学习图表选型原则、视觉设计规范，使用Python、Excel制作各类图表，搭建专业数据可视化看板。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>绘图代码练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第五行 左 -->
+                <!-- 第五行 左：商务智能应用 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(9)">
-                        <h5 class="fw-bold">9. 商务智能应用</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-primary-light text-primary">
+                                <i class="bi bi-speedometer2"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-hard">进阶</span>
+                                <span class="tag-diff">拓展课程</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">9. 商务智能应用</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:22%"></div>
                         </div>
-                        <small class="text-muted">学习进度：22% | 10个章节 · BI练习</small>
-                        <p class="mt-2 mb-0 text-secondary">BI架构、数据建模、交互式报表制作</p>
+                        <small class="text-muted">整体学习进度：22%</small>
+                        <p class="course-desc">了解BI整体架构、数据建模逻辑，掌握主流BI工具用法，制作交互式报表、企业运营监控看板。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>报表搭建练习
+                        </div>
                     </div>
                 </div>
-                <!-- 第五行 右 -->
+                <!-- 第五行 右：大数据导论 -->
                 <div class="col-md-6">
                     <div class="course-card-home" onclick="openCourse(10)">
-                        <h5 class="fw-bold">10. 大数据导论</h5>
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="course-icon bg-warning-subtle text-warning">
+                                <i class="bi bi-cloud"></i>
+                            </div>
+                            <div>
+                                <span class="tag-diff tag-middle">中等</span>
+                                <span class="tag-diff">认知课程</span>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">10. 大数据导论</h5>
                         <div class="progress my-2">
                             <div class="progress-bar" style="width:18%"></div>
                         </div>
-                        <small class="text-muted">学习进度：18% | 10个章节 · 概念练习</small>
-                        <p class="mt-2 mb-0 text-secondary">大数据特征、技术生态、分布式存储与计算</p>
+                        <small class="text-muted">整体学习进度：18%</small>
+                        <p class="course-desc">认识大数据四大特征、主流技术生态、分布式存储与计算原理，了解大数据在各行业的落地应用场景。</p>
+                        <div class="course-meta">
+                            <i class="bi bi-book me-1"></i>共10个章节
+                            <span class="mx-2">|</span>
+                            <i class="bi bi-pencil-square me-1"></i>概念理解练习
+                        </div>
                     </div>
                 </div>
             </div>
@@ -268,7 +473,7 @@
             </button>
             <h4 id="course-title" class="fw-bold mb-4"></h4>
 
-            <!-- 在线统一练习面板（全局共用，所有章节都能用） -->
+            <!-- 在线统一练习面板（全局共用） -->
             <div class="practice-box">
                 <h5 class="fw-bold mb-3"><i class="bi bi-code-slash text-primary me-2"></i>在线代码练习台</h5>
                 <div class="mb-3">
@@ -303,62 +508,218 @@
                 chapters: [
                     {
                         title: "第1章 Python环境搭建与入门",
-                        points: ["Python解释器安装", "Anaconda配置", "VS Code使用", "编程规范"],
-                        exercise: "输出个人信息\n示例代码：\nprint('樊珍秀 | 广科 商务数据分析专业')",
-                        code: "print('樊珍秀 | 广东科学技术职业学院 商务数据分析与应用专业')"
+                        knowledge: {
+                            core: ["Python语言定位：解释型脚本语言，语法简洁，广泛应用于数据分析、爬虫、人工智能",
+                                   "Python解释器：官方CPython解释器，负责解析并执行代码",
+                                   "Anaconda集成环境：内置Python解释器、数百个数据分析类第三方库，简化环境配置",
+                                   "代码编辑器：VS Code、PyCharm功能区别与基础设置",
+                                   "PEP8编码规范：缩进、换行、命名规则，保证代码可读性"],
+                            hard: ["区分交互式命令行与脚本文件运行方式",
+                                   "多版本Python共存的简单管理方法",
+                                   "代码报错基础排查思路"],
+                            extend: ["Python发展历史与主流应用领域",
+                                     "数据分析方向必备第三方库简介（pandas/numpy/matplotlib）"]
+                        },
+                        think: "为什么数据分析领域优先选择Python，而非其他编程语言？",
+                        exercise: {
+                            base: "使用print()函数，分行输出你的姓名、学校、专业、学习方向",
+                            advance: "尝试在代码中添加单行注释、多行注释，理解注释的作用"
+                        },
+                        code: "print('姓名：樊珍秀')\nprint('学校：广东科学技术职业学院')\nprint('专业：商务数据分析与应用')"
                     },
                     {
                         title: "第2章 变量、数据类型与运算符",
-                        points: ["变量命名", "四大基础类型", "算术/逻辑运算符", "类型转换"],
-                        exercise: "定义变量计算两数之和",
-                        code: "a = 10\nb = 20\nprint(a + b)"
+                        knowledge: {
+                            core: ["变量的概念：内存中临时存储数据的容器，无需提前声明类型",
+                                   "变量命名规则：由字母、数字、下划线组成，不能以数字开头，禁止使用系统关键字",
+                                   "四大基础数据类型：int整型、float浮点型、str字符串、bool布尔型",
+                                   "算术运算符：加减乘除、取模、幂运算、整除运算",
+                                   "比较运算符：大于、小于、等于、不等于，结果均为布尔值",
+                                   "逻辑运算符：and、or、not，用于多条件组合判断",
+                                   "强制类型转换：int()、float()、str()、bool()四种转换函数"],
+                            hard: ["不同数据类型之间的运算规则与报错原因",
+                                   "布尔值在运算中的隐式转换",
+                                   "字符串拼接与数字运算的区别"],
+                            extend: ["变量的内存地址查看方法",
+                                     "Python关键字完整列表与使用禁忌"]
+                        },
+                        think: "定义两个变量分别存储价格和数量，思考如何计算总金额？",
+                        exercise: {
+                            base: "定义两个整型变量，完成加减乘除四则运算并逐行输出结果",
+                            advance: "输入两个字符串，尝试拼接；再尝试将字符串转为数字后做运算"
+                        },
+                        code: "a = 25\nb = 10\nprint('加法：', a + b)\nprint('减法：', a - b)\nprint('乘法：', a * b)\nprint('除法：', a / b)"
                     },
                     {
                         title: "第3章 条件分支语句 if",
-                        points: ["if/else/elif", "条件嵌套", "区间判断"],
-                        exercise: "判断分数等级",
+                        knowledge: {
+                            core: ["顺序结构、分支结构、循环结构三大程序执行逻辑",
+                                   "单分支if语句：满足条件则执行内部代码",
+                                   "双分支if...else语句：二选一执行逻辑",
+                                   "多分支if...elif...else语句：多区间、多条件判断",
+                                   "代码缩进规则：Python依靠缩进区分代码块，缩进必须统一",
+                                   "复合条件：结合比较运算符、逻辑运算符实现复杂判断"],
+                            hard: ["多层if嵌套的执行逻辑与代码可读性优化",
+                                   "条件判断中优先级顺序：括号 > 比较运算 > 逻辑运算",
+                                   "边界值判断易错点（如分数临界值、数值区间）"],
+                            extend: ["三元表达式：简化简单二分支判断写法",
+                                     "实战场景：成绩评级、权限判断、状态筛选"]
+                        },
+                        think: "判断一个数字是否在 50~100 区间内，写出判断思路？",
+                        exercise: {
+                            base: "输入学生分数，按照 90及以上优秀、60-89及格、60以下不及格 划分等级",
+                            advance: "增加等级细分：80-89良好、70-79中等，实现五级分数判断"
+                        },
                         code: "score = 85\nif score >= 90:\n    print('优秀')\nelif score >= 60:\n    print('及格')\nelse:\n    print('不及格')"
                     },
                     {
                         title: "第4章 循环结构 for/while",
-                        points: ["while循环", "for遍历", "break/continue"],
-                        exercise: "输出1-10偶数",
+                        knowledge: {
+                            core: ["循环结构作用：重复执行相同代码块，减少冗余代码",
+                                   "while循环：基于条件判断执行，条件成立则持续循环",
+                                   "for循环：遍历可迭代对象（列表、字符串、区间等）",
+                                   "range()函数：生成连续整数序列，搭配for循环使用",
+                                   "break语句：强制终止当前整个循环",
+                                   "continue语句：跳过本次循环，直接进入下一次循环"],
+                            hard: ["while循环死循环产生原因与规避方法",
+                                   "嵌套循环执行顺序（外层循环与内层循环的执行逻辑）",
+                                   "break和continue在嵌套循环中的作用范围"],
+                            extend: ["循环与分支结合的综合应用",
+                                     "循环计数、累加、累乘经典算法思路"]
+                        },
+                        think: "使用循环输出 1-20 所有数字，如何只保留偶数？",
+                        exercise: {
+                            base: "利用for循环输出1~10之间所有偶数",
+                            advance: "使用while循环计算 1到100 所有整数的累加和"
+                        },
                         code: "for i in range(1,11):\n    if i % 2 == 0:\n        print(i)"
                     },
                     {
-                        title: "第5章 列表与元组",
-                        points: ["列表增删改查", "切片", "元组特性"],
-                        exercise: "筛选列表中大于50的数字",
+                        title: "第5章 序列：列表与元组",
+                        knowledge: {
+                            core: ["序列概念：有序、可通过下标访问的数据集合",
+                                   "列表list：可变序列，使用[]定义，支持增删改查所有操作",
+                                   "列表下标：正下标从0开始，负下标从末尾倒序访问",
+                                   "列表常用方法：append()追加、pop()删除、remove()移除元素",
+                                   "切片语法：[起始:结束:步长]，截取列表部分内容",
+                                   "元组tuple：不可变序列，使用()定义，元素无法修改",
+                                   "列表与元组的基础遍历方式"],
+                            hard: ["列表深浅拷贝的区别与使用场景",
+                                   "切片越界的运行规则",
+                                   "元组中包含列表时的特殊可变特性"],
+                            extend: ["列表推导式：快速生成、筛选列表",
+                                     "序列内置函数：len()、max()、min()、sorted()"]
+                        },
+                        think: "列表和元组功能相似，什么场景下必须使用元组？",
+                        exercise: {
+                            base: "创建商品价格列表，筛选出价格大于50的元素并组成新列表",
+                            advance: "对列表进行升序、降序排序，并删除列表中重复元素"
+                        },
                         code: "lst = [12,66,34,78,22]\nnew_lst = [x for x in lst if x>50]\nprint(new_lst)"
                     },
                     {
-                        title: "第6章 字典与集合",
-                        points: ["字典键值操作", "集合去重", "集合运算"],
-                        exercise: "用字典存储个人信息并遍历",
+                        title: "第6章 映射与集合：字典、set",
+                        knowledge: {
+                            core: ["字典dict：键值对映射结构，{}定义，通过键访问值，键唯一不可重复",
+                                   "字典基础操作：增、删、改、查、遍历键/值/键值对",
+                                   "集合set：无序不重复元素集合，自动去重",
+                                   "集合四大运算：交集、并集、差集、对称差集",
+                                   "三种数据结构适用场景区分：列表存有序数据、字典存关联数据、集合做去重"],
+                            hard: ["字典键的数据类型限制（不可变类型才可作为键）",
+                                   "集合无序特性导致无法下标访问",
+                                   "字典嵌套、集合嵌套的使用规则"],
+                            extend: ["字典推导式用法",
+                                     "利用集合快速完成两个列表的异同对比"]
+                        },
+                        think: "使用字典存储学生姓名和对应成绩，如何快速查找指定学生分数？",
+                        exercise: {
+                            base: "用字典存储个人信息（姓名、院校、专业），遍历输出所有内容",
+                            advance: "创建两个列表，利用集合找出两个列表中相同的元素"
+                        },
                         code: "info = {'name':'樊珍秀','major':'商务数据分析'}\nfor k,v in info.items():\n    print(k, v)"
                     },
                     {
-                        title: "第7章 自定义函数",
-                        points: ["def定义函数", "参数与返回值", "变量作用域"],
-                        exercise: "封装求和函数",
+                        title: "第7章 自定义函数基础",
+                        knowledge: {
+                            core: ["函数作用：封装重复代码，实现代码复用、模块化开发",
+                                   "def关键字：定义自定义函数",
+                                   "形参和实参：函数定义时为形参，调用时传入为实参",
+                                   "return语句：函数返回执行结果，终止函数运行",
+                                   "函数调用方法：函数名+括号传参",
+                                   "变量作用域：局部变量（函数内部）、全局变量（函数外部）"],
+                            hard: ["全局变量与局部变量重名的优先级规则",
+                                   "函数多参数、默认参数的使用规则",
+                                   "无返回值函数与有返回值函数的区别"],
+                            extend: ["函数文档注释规范",
+                                     "简单函数嵌套调用逻辑"]
+                        },
+                        think: "把“两数求和”代码封装成函数，有什么优势？",
+                        exercise: {
+                            base: "封装一个求和函数，传入两个数字，返回相加结果并调用测试",
+                            advance: "封装函数，实现计算一组数字的平均值"
+                        },
                         code: "def add(x,y):\n    return x+y\nprint(add(3,5))"
                     },
                     {
-                        title: "第8章 文件读写",
-                        points: ["open函数", "with上下文", "文本读写"],
-                        exercise: "写入文本并读取",
+                        title: "第8章 文件IO读写操作",
+                        knowledge: {
+                            core: ["文件操作流程：打开文件 → 读写内容 → 关闭文件",
+                                   "open()函数：打开文件，指定文件路径、打开模式、编码格式",
+                                   "常用打开模式：r只读、w清空写入、a追加写入",
+                                   "with上下文管理器：自动关闭文件，避免资源占用",
+                                   "文本文件读写：read()读取全部、readline()逐行读取、write()写入内容"],
+                            hard: ["绝对路径与相对路径的写法区别",
+                                   "编码问题导致的中文乱码解决方案",
+                                   "大文件逐行读取的优化思路"],
+                            extend: ["二进制文件读写基础",
+                                     "文件存在性判断方法"]
+                        },
+                        think: "使用w模式和a模式写入文件，结果有什么不同？",
+                        exercise: {
+                            base: "将一段专业介绍文本写入txt文件，再读取文件内容并打印",
+                            advance: "逐行读取文本文件内容，并统计文件一共有多少行"
+                        },
                         code: "with open('test.txt','w',encoding='utf-8') as f:\n    f.write('数据分析学习')\nwith open('test.txt','r',encoding='utf-8') as f:\n    print(f.read())"
                     },
                     {
-                        title: "第9章 异常处理",
-                        points: ["try-except捕获", "常见异常类型"],
-                        exercise: "捕获类型错误",
-                        code: "try:\n    num = int('abc')\nexcept ValueError:\n    print('类型转换失败')"
+                        title: "第9章 异常捕获处理 try-except",
+                        knowledge: {
+                            core: ["程序异常：代码运行时出现的错误，会直接终止程序",
+                                   "异常捕获语法：try...except，拦截异常并给出友好提示",
+                                   "常见基础异常：ValueError值错误、TypeError类型错误、IndexError下标错误",
+                                   "else分支：无异常时执行的代码",
+                                   "finally分支：无论是否报错，最终都会执行的代码"],
+                            hard: ["多异常同时捕获的写法",
+                                   "异常层级与精准捕获原则",
+                                   "主动抛出异常raise用法"],
+                            extend: ["异常排查的日志输出思路",
+                                     "实战中异常处理的通用模板"]
+                        },
+                        think: "用户输入内容时，很容易出现类型错误，为什么需要异常捕获？",
+                        exercise: {
+                            base: "编写代码，尝试将字符串转为数字，并用异常捕获处理类型错误",
+                            advance: "结合循环、异常捕获，实现循环接收用户输入，直到输入合法数字为止"
+                        },
+                        code: "try:\n    num = int('abc')\nexcept ValueError:\n    print('类型转换失败，请输入纯数字')"
                     },
                     {
-                        title: "第10章 Python综合实战",
-                        points: ["全语法整合", "数据统计工具"],
-                        exercise: "成绩统计：计算平均分",
+                        title: "第10章 Python综合小型数据项目",
+                        knowledge: {
+                            core: ["综合运用前面所有语法：变量、分支、循环、函数、列表、字典",
+                                   "小型项目开发流程：需求分析 → 逻辑梳理 → 代码编写 → 测试调试",
+                                   "数据统计基础逻辑：求和、计数、求最大/最小值、求平均值",
+                                   "用户交互：input()函数接收外部输入，实现交互式程序"],
+                            hard: ["复杂逻辑拆解为多个函数的模块化设计",
+                                   "多组数据的批量处理思路",
+                                   "项目bug整体排查"],
+                            extend: ["数据结果格式化输出",
+                                     "简单数据持久化（结果写入文件）"]
+                        },
+                        think: "开发成绩统计工具，需要分几步梳理逻辑？",
+                        exercise: {
+                            base: "录入5名学生成绩，计算总分、平均分、最高分、最低分",
+                            advance: "增加功能：统计不及格人数，并将所有成绩和统计结果写入本地文件"
+                        },
                         code: "scores = [88,92,79,85]\navg = sum(scores)/len(scores)\nprint('平均分：',avg)"
                     }
                 ]
@@ -366,204 +727,250 @@
             2: {
                 title: "2. 数据分析技术",
                 chapters: [
-                    {title:"第1章 数据分析流程",points:["采集-清洗-分析-可视化-报告"],exercise:"简述数据分析五大步骤",code:"print('1.数据采集 2.数据清洗 3.数据分析 4.可视化 5.报告输出')"},
-                    {title:"第2章 指标体系搭建",points:["流量/转化/营收指标","维度与指标"],exercise:"列举3个电商核心指标",code:"print('访客数、转化率、客单价')"},
-                    {title:"第3章 描述性统计",points:["均值、中位数、方差、标准差"],exercise:"计算一组数据均值",code:"import statistics\ndata = [12,15,18,20]\nprint(statistics.mean(data))"},
-                    {title:"第4章 数据清洗",points:["缺失值、重复值、异常值"],exercise:"列表去重",code:"lst = [1,2,2,3,3,4]\nprint(list(set(lst)))"},
-                    {title:"第5章 分组聚合",points:["多维度分组、聚合计算"],exercise:"分组求和",code:"# 模拟分组逻辑\nprint('按类别分组后求和')"},
-                    {title:"第6章 对比分析",points:["同比、环比、占比"],exercise:"计算占比",code:"total = 100\npart = 25\nprint('占比：', part/total)"},
-                    {title:"第7章 趋势分析",points:["时间序列、周期波动"],exercise:"输出时序数据",code:"trend = [10,12,15,19]\nprint('月度数据：',trend)"},
-                    {title:"第8章 相关性分析",points:["相关系数、正负相关"],exercise:"简单关联判断",code:"print('数值同向变化为正相关')"},
-                    {title:"第9章 分析方法论",points:["MECE、5W2H、漏斗分析"],exercise:"写出5W2H",code:"print('What/Why/Who/When/Where/How/How much')"},
-                    {title:"第10章 分析报告撰写",points:["报告结构、图表搭配、结论输出"],exercise:"报告三大模块",code:"print('现状分析-问题挖掘-优化建议')"}
+                    {
+                        title: "第1章 数据分析行业体系与流程",
+                        knowledge: {
+                            core: ["数据分析定义：对原始数据加工、提炼、挖掘价值，辅助商业决策",
+                                   "数据分析五大标准流程：数据采集 → 数据清洗 → 数据分析 → 数据可视化 → 分析报告",
+                                   "岗位分类：数据运营、数据分析师、大数据分析师的工作侧重",
+                                   "商务数据分析特点：结合业务，以盈利、降本、增效为最终目标"],
+                            hard: ["全流程各环节的衔接要点与质量标准",
+                                   "业务需求转化为数据需求的思路",
+                                   "不同行业数据分析流程的差异化调整"],
+                            extend: ["数据分析行业发展现状与就业方向",
+                                     "数据分析常用工具栈（Python、SQL、Excel、BI工具）"]
+                        },
+                        think: "结合电商行业，简述数据分析五大流程分别要做什么工作？",
+                        exercise: {
+                            base: "逐条写出数据分析五大流程，并简单解释每个环节作用",
+                            advance: "以校园超市为场景，设计一套完整的数据分析工作流程"
+                        },
+                        code: "print('1.数据采集 2.数据清洗 3.数据分析 4.数据可视化 5.报告输出')"
+                    },
+                    {
+                        title: "第2章 企业指标体系搭建逻辑",
+                        knowledge: {
+                            core: ["指标定义：衡量业务状态的量化数值，分为绝对指标、相对指标",
+                                   "维度定义：对数据进行分类、拆分的角度（时间、地区、人群、产品）",
+                                   "电商四大核心指标板块：流量指标、转化指标、营收指标、用户指标",
+                                   "KPI关键绩效指标：企业核心考核数据",
+                                   "指标计算口径：统一计算公式、统计范围、统计周期"],
+                            hard: ["指标与维度的区分与组合使用",
+                                   "复合指标的拆解方法",
+                                   "不同层级指标（公司/门店/个人）设计原则"],
+                            extend: ["指标看板搭建规范",
+                                     "行业通用指标库参考"]
+                        },
+                        think: "区分“访客数”（指标）和“按日期统计”（维度）的区别？",
+                        exercise: {
+                            base: "列举电商3个核心流量指标、2个转化指标",
+                            advance: "为线下零售门店搭建一套包含8个核心指标的KPI清单"
+                        },
+                        code: "print('访客数、转化率、客单价')"
+                    },
+                    {
+                        title: "第3章 描述性统计分析",
+                        knowledge: {
+                            core: ["描述性统计：用指标概括数据整体特征，是数据分析基础",
+                                   "集中趋势指标：均值、中位数、众数，反映数据中心位置",
+                                   "离散趋势指标：极差、方差、标准差，反映数据波动程度",
+                                   "分位数：四分位数，用于划分数据区间、识别异常值",
+                                   "Python statistics库：快速计算各类统计指标"],
+                            hard: ["均值、中位数、众数的适用场景与优缺点",
+                                   "方差与标准差的计算逻辑与实际意义",
+                                   "偏态数据下统计指标的选择策略"],
+                            extend: ["频数、频率统计",
+                                     "描述统计结果的业务解读方法"]
+                        },
+                        think: "一组成绩中有极端高分，为什么用中位数比均值更合理？",
+                        exercise: {
+                            base: "使用Python计算一组销售数据的平均值、最大值、最小值",
+                            advance: "计算数据的方差和标准差，并解读数据波动大小"
+                        },
+                        code: "import statistics\ndata = [12,15,18,20]\nprint(statistics.mean(data))"
+                    },
+                    {
+                        title: "第4章 数据清洗标准化流程",
+                        knowledge: {
+                            core: ["数据清洗地位：原始数据80%问题集中在此环节，决定分析结果准确性",
+                                   "四大脏数据类型：缺失值、重复值、异常值、格式不统一数据",
+                                   "缺失值处理：删除法、填充法（均值/中位数/固定值填充）",
+                                   "重复值处理：整行去重、关键字段去重",
+                                   "异常值处理：盖帽法、删除法、单独标记留存"],
+                            hard: ["不同业务场景下脏数据处理方案选择",
+                                   "批量清洗海量数据的效率优化",
+                                   "清洗规则固化与复用"],
+                            extend: ["数据格式标准化（日期、文本、数值统一）",
+                                     "数据清洗质量验收标准"]
+                        },
+                        think: "客户手机号数据大量缺失，应该选择删除还是填充？说明理由",
+                        exercise: {
+                            base: "对列表中的重复数据完成去重操作",
+                            advance: "模拟一组含缺失值的数据，分别用均值和固定值两种方式填充"
+                        },
+                        code: "lst = [1,2,2,3,3,4]\nprint(list(set(lst)))"
+                    },
+                    {
+                        title: "第5章 分组聚合与透视分析",
+                        knowledge: {
+                            core: ["分组分析：按照指定维度拆分数据，对比不同组别差异",
+                                   "聚合运算：分组后执行求和、计数、求平均等统计计算",
+                                   "数据透视表：多维度分组+聚合的综合工具，Excel/Pandas核心功能",
+                                   "单层分组、多层分组的应用场景",
+                                   "分组排序：分组后对结果二次排序"],
+                            hard: ["多层分组的维度优先级设置",
+                                   "分组后筛选数据的实现方法",
+                                   "大数量级数据分组的性能问题"],
+                            extend: ["交叉表分析",
+                                     "分组结果的横向、纵向对比解读"]
+                        },
+                        think: "按“地区+产品”两层分组统计销量，能分析出什么业务问题？",
+                        exercise: {
+                            base: "模拟分类数据，按类别分组并计算每组数据总和",
+                            advance: "实现两层分组统计，并对分组结果按数值降序排列"
+                        },
+                        code: "print('按类别分组后求和')"
+                    },
+                    {
+                        title: "第6章 对比&结构分析法",
+                        knowledge: {
+                            core: ["对比分析法：数据分析最常用方法，通过对比发现差异",
+                                   "时间维度对比：同比（去年同期）、环比（上一周期）",
+                                   "空间维度对比：不同门店、不同区域、不同竞品对比",
+                                   "结构分析：计算各部分占总体的比例，分析内部构成",
+                                   "占比、累计占比的计算与解读"],
+                            hard: ["同比、环比的适用场景与局限性",
+                                   "多组数据综合对比的图表选择",
+                                   "结构变化趋势分析"],
+                            extend: ["标杆对比法（与行业标准、目标值对比）",
+                                     "差异原因分析思路"]
+                        },
+                        think: "月度销量同时做同比和环比，分别能看出什么问题？",
+                        exercise: {
+                            base: "已知部分数值和总体，计算单项数据的占比",
+                            advance: "模拟连续3个月数据，分别计算环比增长率"
+                        },
+                        code: "total = 100\npart = 25\nprint('占比：', part/total)"
+                    },
+                    {
+                        title: "第7章 时间序列趋势分析",
+                        knowledge: {
+                            core: ["时间序列：按照时间顺序排列的观测数据，核心分析时序变化",
+                                   "三大时序特征：长期趋势、周期性波动、随机波动",
+                                   "趋势判断：上升趋势、下降趋势、平稳趋势",
+                                   "周期识别：日周期、周周期、月周期、季节周期",
+                                   "简单趋势预判：基于历史数据预估短期走势"],
+                            hard: ["区分周期性波动和随机异常波动",
+                                   "多因素影响下的趋势拆解",
+                                   "短期预判的误差控制"],
+                            extend: ["时序数据平滑处理",
+                                     "季节性指数计算"]
+                        },
+                        think: "零售商品每年11月销量明显上涨，属于哪种时序特征？",
+                        exercise: {
+                            base: "输出一组月度销量时序数据，判断整体趋势",
+                            advance: "结合周期规律，预估下一个周期的大致销量"
+                        },
+                        code: "trend = [10,12,15,19]\nprint('月度数据：',trend)"
+                    },
+                    {
+                        title: "第8章 变量相关性分析",
+                        knowledge: {
+                            core: ["相关性：两个或多个变量之间的关联程度",
+                                   "相关关系分类：正相关、负相关、无相关",
+                                   "皮尔逊相关系数：取值范围[-1,1]，数值绝对值越大相关性越强",
+                                   "相关系数解读标准：0.8以上强相关、0.3-0.8中等相关、0.3以下弱相关",
+                                   "相关性≠因果关系，核心区分要点"],
+                            hard: ["非线性相关的识别",
+                                   "多变量之间的复杂相关网络",
+                                   "规避“相关误判因果”的分析误区"],
+                            extend: ["相关性在营销、库存预测中的应用",
+                                     "散点图可视化相关性"]
+                        },
+                        think: "广告投入越高，销量越高，这是正相关还是因果关系？",
+                        exercise: {
+                            base: "根据数据变化规律，判断两组数据是正相关还是负相关",
+                            advance: "结合业务场景，举例说明三组存在相关性的业务指标"
+                        },
+                        code: "print('数值同向变化为正相关')"
+                    },
+                    {
+                        title: "第9章 经典分析方法论",
+                        knowledge: {
+                            core: ["MECE分析法：相互独立、完全穷尽，问题拆解不重不漏",
+                                   "5W2H分析法：全面拆解事件（何事/何人/何时/何地/为何/如何/多少）",
+                                   "漏斗分析法：分析转化流程，定位流失节点，常用于流量转化",
+                                   "杜邦分析法：逐层拆解核心指标，追溯利润变化原因",
+                                   "各类方法论的基础使用步骤"],
+                            hard: ["复杂业务问题用MECE分层拆解技巧",
+                                   "长转化漏斗的分层优化思路",
+                                   "多种方法论组合使用"],
+                            extend: ["SWOT分析、PEST分析等行业通用模型",
+                                     "方法论落地到业务分析的案例"]
+                        },
+                        think: "分析APP用户从下载到付费的流失问题，优先使用哪种方法论？",
+                        exercise: {
+                            base: "完整写出5W2H七个分析维度",
+                            advance: "用漏斗模型梳理电商“浏览-加购-下单-付款”转化流程"
+                        },
+                        code: "print('What/Why/Who/When/Where/How/How much')"
+                    },
+                    {
+                        title: "第10章 商务数据分析报告撰写",
+                        knowledge: {
+                            core: ["数据分析报告定位：数据结论的最终载体，面向管理者、业务人员",
+                                   "标准报告结构：标题 → 目录 → 背景说明 → 数据说明 → 分析内容 → 问题总结 → 优化建议",
+                                   "图表搭配原则：一图一结论，图表简洁、标注清晰",
+                                   "商务语言规范：数据结合业务，避免纯技术术语",
+                                   "结论撰写：先总结现象，再分析原因，最后给出可落地建议"],
+                            hard: ["根据阅读对象调整报告深浅程度",
+                                   "多维度分析内容的逻辑串联",
+                                   "建议方案的可行性评估"],
+                            extend: ["PPT版数据报告排版技巧",
+                                     "日报、周报、月报、专题报告的区别"]
+                        },
+                        think: "一份合格的商务数据分析报告，最重要的部分是什么？",
+                        exercise: {
+                            base: "写出数据分析报告三大核心模块",
+                            advance: "模拟校园超市销量分析，撰写一段简短报告结论与建议"
+                        },
+                        code: "print('现状分析-问题挖掘-优化建议')"
+                    }
                 ]
             },
             3: {
                 title: "3. 数据采集与处理",
                 chapters: [
-                    {title:"第1章 数据来源分类",points:["业务库、网页、API、公开数据集"],exercise:"列举4种数据来源",code:"print('数据库、网页、接口、本地文件')"},
-                    {title:"第2章 网页爬虫基础",points:["HTML结构、请求响应"],exercise:"理解网页请求",code:"print('客户端发起请求，服务器返回数据')"},
-                    {title:"第3章 Requests请求",points:["GET/POST、请求头"],exercise:"简单网络请求",code:"# 模拟请求\nprint('使用requests.get()发起网页请求')"},
-                    {title:"第4章 BeautifulSoup解析",points:["标签查找、内容提取"],exercise:"解析网页标签",code:"print('通过标签名、class定位内容')"},
-                    {title:"第5章 正则表达式",points:["元字符、批量匹配"],exercise:"匹配数字",code:"import re\ntext='价格：99元'\nres = re.findall(r'\\d+',text)\nprint(res)"},
-                    {title:"第6章 数据存入表格",points:["CSV/Excel写入"],exercise:"写入CSV",code:"import csv\nwith open('data.csv','w',newline='') as f:\n    w = csv.writer(f)\n    w.writerow(['姓名','专业'])"},
-                    {title:"第7章 反爬基础",points:["UA伪装、延时访问"],exercise:"添加请求头",code:"print('设置User-Agent模拟浏览器')"},
-                    {title:"第8章 结构化整理",points:["行列转换、字段拆分"],exercise:"字符串拆分",code:"s = '樊珍秀,商务数据分析'\nprint(s.split(','))"},
-                    {title:"第9章 批量预处理",points:["编码统一、格式标准化"],exercise:"去除空格",code:"s = '  数据分析  '\nprint(s.strip())"},
-                    {title:"第10章 爬虫综合实战",points:["全流程采集清洗存储"],exercise:"综合爬虫思路",code:"print('请求→解析→清洗→存储')"}
-                ]
-            },
-            4: {
-                title: "4. 供应链数据分析",
-                chapters: [
-                    {title:"第1章 供应链全链路",points:["采购-仓储-物流-销售"],exercise:"简述供应链链路",code:"print('采购→入库存储→物流配送→终端销售')"},
-                    {title:"第2章 供应链核心指标",points:["库存周转率、缺货率、履约时效"],exercise:"写出库存周转率公式",code:"print('库存周转率 = 销售成本 / 平均库存')"},
-                    {title:"第3章 采购数据分析",points:["供应商评估、价格分析"],exercise:"统计采购总量",code:"purchase = [100,120,90]\nprint(sum(purchase))"},
-                    {title:"第4章 仓储库存分析",points:["安全库存、畅滞销品"],exercise:"判断库存状态",code:"stock = 20\nif stock < 30:\n    print('库存偏低')"},
-                    {title:"第5章 出入库统计",points:["流水统计、异常排查"],exercise:"出入库差值计算",code:"in_num = 50\nout_num = 30\nprint('当前库存：',in_num-out_num)"},
-                    {title:"第6章 物流配送分析",points:["时效、成本、区域分布"],exercise:"计算平均配送时长",code:"time_list = [2,3,2.5]\nprint(sum(time_list)/len(time_list))"},
-                    {title:"第7章 需求预测",points:["历史销量拟合、短期预判"],exercise:"趋势简单预测",code:"sale = [20,22,25]\nprint('下月预估：', sale[-1]+3)"},
-                    {title:"第8章 供应链风险",points:["断货、积压、成本风险"],exercise:"识别积压库存",code:"stock = 100\nsale = 20\nif stock > sale*5:\n    print('库存积压')"},
-                    {title:"第9章 供应链可视化",points:["链路图、监控看板"],exercise:"选择合适图表",code:"print('库存变化使用折线图')"},
-                    {title:"第10章 综合案例分析",points:["企业全链路数据分析"],exercise:"分析流程梳理",code:"print('指标查看→异常定位→原因分析→建议')"}
-                ]
-            },
-            5: {
-                title: "5. 数据库原理与应用",
-                chapters: [
-                    {title:"第1章 数据库基础",points:["DB/DBMS、关系型数据库"],exercise:"数据库作用",code:"-- SQL注释\n-- 存储、管理海量结构化数据"},
-                    {title:"第2章 E-R模型与三范式",points:["实体、联系、设计规范"],exercise:"设计学生表字段",code:"-- 学生表：id,姓名,专业"},
-                    {title:"第3章 MySQL环境",points:["服务启停、客户端连接"],exercise:"连接数据库命令",code:"-- mysql -u root -p"},
-                    {title:"第4章 库表管理",points:["建库、建表、主键外键"],exercise:"创建数据表",code:"CREATE TABLE student(id INT,name VARCHAR(20));"},
-                    {title:"第5章 单表查询SELECT",points:["条件筛选、排序、限制"],exercise:"查询所有数据",code:"SELECT * FROM student;"},
-                    {title:"第6章 增删改操作",points:["INSERT/UPDATE/DELETE"],exercise:"插入数据",code:"INSERT INTO student VALUES(1,'樊珍秀');"},
-                    {title:"第7章 聚合与分组",points:["SUM/COUNT/GROUP BY"],exercise:"统计行数",code:"SELECT COUNT(*) FROM student;"},
-                    {title:"第8章 多表连接",points:["内连接、左连接"],exercise:"两表关联查询",code:"SELECT * FROM a JOIN b ON a.id=b.id;"},
-                    {title:"第9章 索引与视图",points:["索引加速、视图简化查询"],exercise:"创建索引",code:"CREATE INDEX idx_name ON student(name);"},
-                    {title:"第10章 数据库综合实战",points:["业务库设计、全套SQL"],exercise:"订单表查询",code:"SELECT * FROM `order` WHERE money>100;"}
-                ]
-            },
-            6: {
-                title: "6. Excel高级数据应用",
-                chapters: [
-                    {title:"第1章 Excel基础设置",points:["工作表、视图、格式"],exercise:"冻结首行",code:"print('视图→冻结窗格→冻结首行')"},
-                    {title:"第2章 单元格格式",points:["数值、日期、数据有效性"],exercise:"设置日期格式",code:"print('右键单元格→设置单元格格式→日期')"},
-                    {title:"第3章 基础统计函数",points:["SUM/MAX/MIN/COUNT"],exercise:"求和",code:"print('=SUM(A1:A10)')"},
-                    {title:"第4章 逻辑函数",points:["IF/AND/OR"],exercise:"条件判断",code:"print('=IF(A1>=60,\"及格\",\"不及格\")')"},
-                    {title:"第5章 查找函数",points:["VLOOKUP/XLOOKUP"],exercise:"跨列查找",code:"print('=VLOOKUP(查找值,区域,列数,匹配类型)')"},
-                    {title:"第6章 文本函数",points:["LEFT/RIGHT/MID"],exercise:"截取字符",code:"print('=MID(A1,1,3)')"},
-                    {title:"第7章 排序筛选",points:["高级筛选、条件格式"],exercise:"高亮大于90分数",code:"print('开始→条件格式→突出显示单元格')"},
-                    {title:"第8章 数据透视表",points:["字段布局、分组、切片器"],exercise:"创建透视表",code:"print('插入→数据透视表')"},
-                    {title:"第9章 图表制作",points:["柱状图、折线图、组合图"],exercise:"制作销量折线图",code:"print('选中数据→插入→折线图')"},
-                    {title:"第10章 商务报表实战",points:["自动化报表、模板"],exercise:"报表结构",code:"print('标题→指标→图表→结论')"}
-                ]
-            },
-            7: {
-                title: "7. 统计学基础",chapters:[{title:"第1章 统计概述",points:["描述统计、推断统计"],exercise:"区分两类统计",code:"print('描述：总结现有数据；推断：由样本估总体')"},{title:"第2章 频数分布",points:["频数表、统计图表"],exercise:"统计频次",code:"data=[1,2,2,3,3,3]\nfrom collections import Counter\nprint(Counter(data))"},{title:"第3章 集中趋势",points:["均值、中位数、众数"],exercise:"计算中位数",code:"import statistics\nprint(statistics.median([12,15,18]))"},{title:"第4章 离散程度",points:["方差、标准差、极差"],exercise:"计算极差",code:"lst=[5,12,8,20]\nprint(max(lst)-min(lst))"},{title:"第5章 概率基础",points:["古典概率、条件概率"],exercise:"简单概率计算",code:"print('3个球取1个，概率 1/3')"},{title:"第6章 随机分布",points:["正态分布、二项分布"],exercise:"正态分布特点",code:"print('中间高、两边低、左右对称')"},{title:"第7章 抽样分布",points:["简单随机抽样"],exercise:"抽样思路",code:"print('从总体中随机抽取部分样本')"},{title:"第8章 参数估计",points:["点估计、区间估计"],exercise:"样本估计总体",code:"print('用样本均值估计总体均值')"},{title:"第9章 假设检验",points:["原假设、备择假设"],exercise:"提出假设",code:"print('H0:原假设  H1:备择假设')"},{title:"第10章 统计商务应用",points:["市场调研、经营分析"],exercise:"调研数据分析",code:"print('问卷数据清洗+统计+结论')"}]
-            },
-            8: {
-                title: "8. 数据可视化设计",chapters:[{title:"第1章 可视化原则",points:["视觉规范、配色、布局"],exercise:"可视化目的",code:"print('直观传递数据信息')"},{title:"第2章 图表选型",points:["不同场景匹配图表"],exercise:"对比用什么图",code:"print('类别对比 → 柱状图')"},{title:"第3章 基础图表绘制",points:["柱状/折线/饼图"],exercise:"简单绘图",code:"import matplotlib.pyplot as plt\nplt.plot([1,2,3],[2,4,3])\n# 本地运行可显示图表"},{title:"第4章 进阶图表",points:["漏斗图、热力图、地图"],exercise:"流程分析选漏斗图",code:"print('转化流程使用漏斗图')"},{title:"第5章 图表美化",points:["字体、配色、图例"],exercise:"图表优化要点",code:"print('配色统一、图例清晰、标题明确')"},{title:"第6章 Excel可视化",points:["动态图表、组合图"],exercise:"制作组合图",code:"print('选中多组数据→插入组合图')"},{title:"第7章 Matplotlib绘图",points:["多子图、样式调整"],exercise:"绘制双折线",code:"import matplotlib.pyplot as plt\nx=[1,2,3]\ny1=[2,3,4]\ny2=[4,3,2]\nplt.plot(x,y1,x,y2)"},{title:"第8章 Seaborn绘图",points:["统计高颜值图表"],exercise:"分布直方图",code:"print('seaborn.histogram()绘制分布')"},{title:"第9章 数据看板",points:["大屏布局、指标排版"],exercise:"看板模块划分",code:"print('核心指标区、趋势区、明细区')"},{title:"第10章 可视化综合项目",points:["全流程可视化报告"],exercise:"完整流程",code:"print('原始数据→处理→绘图→排版输出')"}]
-            },
-            9: {
-                title: "9. 商务智能应用",chapters:[{title:"第1章 BI概念",points:["BI定义、应用价值"],exercise:"BI作用",code:"print('整合数据，辅助商业决策')"},{title:"第2章 BI架构",points:["数据层、计算层、展示层"],exercise:"三层架构",code:"print('数据源→计算引擎→可视化展示')"},{title:"第3章 主流BI工具",points:["Power BI、FineBI"],exercise:"工具特点",code:"print('拖拽式操作，零代码做报表')"},{title:"第4章 数据建模",points:["维度表、事实表"],exercise:"区分维度与指标",code:"print('维度：分类；指标：数值')"},{title:"第5章 数据整合",points:["多数据源接入、清洗"],exercise:"多表合并",code:"print('将业务多表关联整合')"},{title:"第6章 度量值计算",points:["自定义指标、DAX基础"],exercise:"新增计算指标",code:"print('基于原始字段计算衍生指标')"},{title:"第7章 交互式报表",points:["切片器、联动、钻取"],exercise:"切片器作用",code:"print('快速筛选报表数据')"},{title:"第8章 移动端BI",points:["报表发布、移动端查看"],exercise:"报表分享",code:"print('发布链接，手机端直接访问')"},{title:"第9章 企业BI案例",points:["零售、电商BI落地"],exercise:"零售BI分析方向",code:"print('销量、客单价、门店对比')"},{title:"第10章 BI综合实战",points:["独立制作企业看板"],exercise:"看板制作流程",code:"print('导数据→建模→做图表→布局发布')"}]
-            },
-            10: {
-                title: "10. 大数据导论",chapters:[{title:"第1章 大数据特征",points:["4V特征：海量、高速、多样、低价值密度"],exercise:"简述4V",code:"print('Volume、Velocity、Variety、Veracity')"},{title:"第2章 行业应用",points:["政务、金融、零售"],exercise:"大数据金融应用",code:"print('风控、用户画像、精准营销')"},{title:"第3章 技术生态",points:["Hadoop、Spark、Flink"],exercise:"生态组件作用",code:"print('Hadoop存储，Spark计算')"},{title:"第4章 分布式存储",points:["分布式文件系统"],exercise:"分布式优势",code:"print('大容量、高可用、易扩展')"},{title:"第5章 分布式计算",points:["并行计算、任务调度"],exercise:"并行计算特点",code:"print('多节点同时计算，提升速度')"},{title:"第6章 数据采集技术",points:["流式数据采集"],exercise:"流式数据特点",code:"print('实时不间断产生的数据')"},{title:"第7章 大数据预处理",points:["海量数据清洗、转换"],exercise:"大数据清洗难点",code:"print('数据量大、格式复杂')"},{title:"第8章 大数据分析框架",points:["离线分析、实时分析"],exercise:"离线vs实时",code:"print('离线：批量历史数据；实时：即时数据')"},{title:"第9章 大数据可视化",points:["大数据大屏、实时监控"],exercise:"实时大屏作用",code:"print('监控业务动态数据')"},{title:"第10章 大数据综合认知",points:["技术体系、行业发展"],exercise:"学习方向规划",code:"print('编程+数据库+分布式技术')"}]
-            }
-        };
-
-        // 切换页面：显示首页
-        function showHome(){
-            document.getElementById("home-page").style.display = "block";
-            document.getElementById("course-detail").style.display = "none";
-        }
-
-        // 打开对应课程详情
-        function openCourse(id){
-            document.getElementById("home-page").style.display = "none";
-            document.getElementById("course-detail").style.display = "block";
-            let data = courseData[id];
-            document.getElementById("course-title").innerText = data.title;
-            let chapterHtml = "";
-            data.chapters.forEach((item, idx)=>{
-                let pointsHtml = "";
-                item.points.forEach(p=>{
-                    pointsHtml += `<span class="tag">${p}</span>`;
-                });
-                chapterHtml += `
-                <div class="chapter-item">
-                    <div class="chapter-title" onclick="toggleChapter(this)">
-                        <span class="fw-semibold">${item.title}</span>
-                        <button class="btn btn-sm btn-success" onclick="event.stopPropagation();markFinish(this)">标记完成</button>
-                    </div>
-                    <div class="chapter-content">
-                        <div class="mb-2">
-                            <p class="mb-1"><strong>📌 知识要点：</strong></p>
-                            ${pointsHtml}
-                        </div>
-                        <div class="mb-2">
-                            <p class="mb-1"><strong>✍ 本节练习：</strong></p>
-                            <p class="text-secondary">${item.exercise}</p>
-                        </div>
-                        <div>
-                            <p class="mb-1"><strong>💡 参考代码（可复制到练习区运行）：</strong></p>
-                            <code class="text-primary">${item.code}</code>
-                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyCode('${item.code}')">一键复制代码</button>
-                        </div>
-                    </div>
-                </div>
-                `;
-            });
-            document.getElementById("chapter-list").innerHTML = chapterHtml;
-            // 清空练习区
-            document.getElementById("code-area").value = "";
-            document.getElementById("run-output").innerText = "等待运行...";
-        }
-
-        // 展开/收起章节
-        function toggleChapter(el){
-            let content = el.nextElementSibling;
-            content.classList.toggle("active");
-        }
-
-        // 标记章节完成
-        function markFinish(btn){
-            btn.innerText = "已完成";
-            btn.classList.remove("btn-success");
-            btn.classList.add("btn-outline-secondary");
-            btn.disabled = true;
-        }
-
-        // 切换编程语言
-        function switchLang(lang){
-            currentLang = lang;
-            document.getElementById("lang-text").innerText = lang==="python"?"Python":"SQL";
-            let btns = document.querySelectorAll(".practice-box .btn-sm");
-            btns[0].className = lang==="python"?"btn btn-sm btn-primary":"btn btn-sm btn-outline-primary";
-            btns[1].className = lang==="sql"?"btn btn-sm btn-primary":"btn btn-sm btn-outline-primary";
-            document.getElementById("run-output").innerText = "等待运行...";
-        }
-
-        // 运行代码（前端模拟执行，支持基础Python/SQL）
-        function runCode(){
-            let code = document.getElementById("code-area").value;
-            let output = "";
-            try{
-                if(currentLang === "python"){
-                    // 前端简易Python解释器（支持print、基础运算）
-                    const capture = [];
-                    const originalPrint = window.print;
-                    window.print = function(...args){
-                        capture.push(args.join(" "));
-                    };
-                    eval(code);
-                    window.print = originalPrint;
-                    output = capture.join("\n") || "代码执行完成，无输出";
-                }else{
-                    // SQL模拟返回
-                    output = `【SQL模拟执行结果】\n执行语句：\n${code}\n\n执行成功！`;
-                }
-            }catch(e){
-                output = `代码报错：\n${e.message}`;
-            }
-            document.getElementById("run-output").innerText = output;
-        }
-
-        // 清空代码区
-        function clearCode(){
-            document.getElementById("code-area").value = "";
-            document.getElementById("run-output").innerText = "等待运行...";
-        }
-
-        // 一键复制代码
-        function copyCode(text){
-            navigator.clipboard.writeText(text).then(()=>{
-                alert("代码已复制，粘贴到练习区即可运行！");
-            })
-        }
-
-        // 初始化显示首页
-        window.onload = showHome;
-    </script>
-</body>
-</html>
+                    {
+                        title: "第1章 多元化数据来源分类",
+                        knowledge: {
+                            core: ["内部数据源：企业业务数据库、本地文件、业务系统日志",
+                                   "外部数据源：公开数据集、网页数据、第三方API接口、行业报表",
+                                   "结构化数据：表格、数据库表，格式规整，易分析",
+                                   "非结构化数据：网页文本、图片、音频、视频，处理难度高",
+                                   "半结构化数据：JSON、XML格式数据"],
+                            hard: ["不同数据源的权限获取方式与合规要求",
+                                   "多源数据整合的格式统一问题",
+                                   "非结构化数据提取有效信息的思路"],
+                            extend: ["国内常用公开数据集平台",
+                                     "数据采集合规与网络安全常识"]
+                        },
+                        think: "做电商分析，内部数据和外部数据分别可以获取哪些内容？",
+                        exercise: {
+                            base: "列举4种常见的数据来源，并区分结构化/非结构化数据",
+                            advance: "结合专业场景，规划一个分析项目需要采集哪些数据"
+                        },
+                        code: "print('数据库、网页、接口、本地文件')"
+                    },
+                    {
+                        title: "第2章 网页爬虫基础原理",
+                        knowledge: {
+                            core: ["网页访问流程：客户端发送请求 → 服务器响应 → 返回HTML页面",
+                                   "HTML基础结构：标签、元素、属性，网页内容载体",
+                                   "HTTP基础：GET请求（获取数据）、POST请求（提交数据）",
+                                   "爬虫定义：模拟浏览器自动访问网页、提取数据的程序",
+                                   "爬虫工作流程：发送请求 → 获取页面源码 → 解析内容 → 保存数据"],
+                            hard: ["HTTP状态码含义（200成功、404页面不存在、403禁止访问）",
+                                   "网页动态渲染（JS加载数据）与静态网页区别",
+                                   "爬虫与浏览器访问的本质异同"],
+                            extend: ["爬虫应用场景：市场调研
