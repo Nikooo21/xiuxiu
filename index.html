@@ -3,880 +3,567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>樊珍秀 | 商务数据分析专业学习平台</title>
+    <title>樊珍秀 - 商务数据分析学习平台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         :root {
             --primary: #165DFF;
-            --light-bg: #f7f9fc;
-            --card-shadow: 0 4px 20px rgba(22, 93, 255, 0.08);
-            --text-gray: #5a6474;
+            --light-bg: #f5f7fa;
+            --card-shadow: 0 4px 18px rgba(22, 93, 255, 0.1);
+            --text-muted: #6c757d;
         }
         body {
             background-color: var(--light-bg);
             font-family: "Microsoft YaHei", system-ui, sans-serif;
         }
-        /* 头部英雄区 */
-        .hero-banner {
-            background: linear-gradient(135deg, #165DFF 0%, #367BFF 100%);
+        /* 导航栏 */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        /* 头部横幅 */
+        .hero {
+            background: linear-gradient(135deg, #165DFF, #4080FF);
             color: #fff;
-            border-radius: 20px;
-            padding: 45px 30px;
-            margin: 30px 0;
-            box-shadow: 0 8px 30px rgba(22, 93, 255, 0.2);
-        }
-        /* 课程卡片核心样式 */
-        .course-card {
-            background: #ffffff;
             border-radius: 16px;
+            padding: 35px;
+            margin: 25px 0;
+            box-shadow: 0 6px 20px rgba(22,93,255,0.2);
+        }
+        /* 首页课程卡片 两列布局 */
+        .course-card-home {
+            background: #fff;
+            border-radius: 14px;
             box-shadow: var(--card-shadow);
-            margin-bottom: 28px;
-            overflow: hidden;
+            padding: 20px;
+            height: 100%;
+            cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
-        .course-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 36px rgba(22, 93, 255, 0.15);
+        .course-card-home:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(22,93,255,0.18);
+            border-color: var(--primary);
         }
-        .card-header-bar {
-            padding: 20px 24px;
+        /* 课程详情容器 */
+        .course-detail {
+            display: none;
+            margin: 30px 0;
+        }
+        /* 章节模块 */
+        .chapter-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .chapter-title {
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #f0f4fc;
         }
-        .chapter-block {
-            padding: 16px 24px;
-            border-bottom: 1px solid #f6f8fc;
-            cursor: pointer;
-        }
-        .chapter-block:hover {
-            background-color: #fafcff;
-        }
-        .chapter-detail {
-            padding: 20px 24px;
-            background: #fbfdff;
+        .chapter-content {
             display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
-        .chapter-detail.active {
+        .chapter-content.active {
             display: block;
         }
-        /* 进度条 */
-        .progress-small {
-            width: 200px;
-        }
-        .progress-bar {
-            background-color: var(--primary);
-        }
-        /* 在线练习面板 */
-        .practice-container {
+        /* 代码练习区 */
+        .practice-box {
             background: #fff;
-            border-radius: 16px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
             box-shadow: var(--card-shadow);
-            margin: 40px 0;
         }
-        textarea {
-            border: 1px solid #dde4f0;
-            border-radius: 8px;
-            padding: 12px;
-            font-family: Consolas, monospace;
+        textarea.code-editor {
             width: 100%;
-            min-height: 160px;
+            min-height: 180px;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
         }
-        #runOutput {
-            background: #0f172a;
-            color: #36ff8c;
+        .run-result {
+            background: #1a1a2e;
+            color: #4cd964;
             padding: 15px;
             border-radius: 8px;
             min-height: 100px;
+            margin-top: 12px;
             white-space: pre-wrap;
         }
-        .tag-point {
+        /* 标签样式 */
+        .tag {
             display: inline-block;
             background: #e8f1ff;
             color: var(--primary);
-            padding: 4px 10px;
+            padding: 3px 10px;
             border-radius: 20px;
             font-size: 13px;
             margin: 3px;
         }
-        .finish-btn {
-            font-size: 13px;
+        /* 进度条 */
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        .progress-bar {
+            background-color: var(--primary);
+        }
+        /* 返回按钮 */
+        .back-btn {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary fs-4" href="#">
-                <i class="bi bi-bar-chart-line-fill me-2"></i>樊珍秀 · 数据分析学习平台
+            <a class="navbar-brand fw-bold text-primary fs-5" href="#" onclick="showHome()">
+                <i class="bi bi-bar-chart-line-fill me-2"></i>樊珍秀 学习平台
             </a>
-            <div class="ms-auto">
-                <a href="#home" class="nav-link d-inline-block me-4">首页</a>
-                <a href="#courses" class="nav-link d-inline-block me-4">全部课程</a>
-                <a href="#practice" class="nav-link d-inline-block">在线练习台</a>
-            </div>
+            <span class="text-muted">广东科学技术职业学院 · 商务数据分析与应用</span>
         </div>
     </nav>
 
     <div class="container">
-        <!-- 个人信息首页区域 -->
-        <section id="home">
-            <div class="hero-banner">
-                <h2 class="fw-bold mb-3">你好，我是樊珍秀 👋</h2>
-                <p class="fs-5 mb-2">广东科学技术职业学院 · 商学院</p>
-                <p class="fs-5 mb-4">商务数据分析与应用专业 在读学生</p>
-                <p class="opacity-90 fs-6">专注Python编程、数据库、商务数据分析、供应链数据挖掘学习，本平台记录专业课程知识点、学习进度、在线代码实操练习。</p>
-            </div>
-        </section>
+        <!-- 头部个人信息 -->
+        <div class="hero">
+            <h3 class="fw-bold">樊珍秀 👋</h3>
+            <p class="mb-1">商学院 | 商务数据分析与应用专业</p>
+            <p class="opacity-90">专业课程学习 · 知识点练习 · 代码实操平台</p>
+        </div>
 
-        <!-- 全部课程卡片区域 -->
-        <section id="courses">
-            <h3 class="fw-bold mb-5 text-dark"><i class="bi bi-journal-bookmark-fill text-primary me-2"></i>专业核心课程（10门）</h3>
-
-            <!-- 课程1 Python基础 卡片 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">1. Python基础</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
+        <!-- ========== 首页：两列课程卡片列表（默认显示） ========== -->
+        <div id="home-page">
+            <h4 class="fw-bold mb-4"><i class="bi bi-grid-fill text-primary me-2"></i>全部课程（点击卡片进入学习）</h4>
+            <div class="row g-4">
+                <!-- 第一行 左 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(1)">
+                        <h5 class="fw-bold">1. Python基础</h5>
+                        <div class="progress my-2">
                             <div class="progress-bar" style="width:40%"></div>
                         </div>
-                        <small class="text-muted">整体进度：40%</small>
+                        <small class="text-muted">学习进度：40% | 10个章节 · 代码练习</small>
+                        <p class="mt-2 mb-0 text-secondary">Python编程语法、基础数据结构、函数与文件操作</p>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <!-- 第1章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 Python开发环境搭建与入门</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">Python解释器安装</span>
-                            <span class="tag-point">Anaconda环境管理</span>
-                            <span class="tag-point">VS Code/PyCharm配置</span>
-                            <span class="tag-point">终端基础命令</span>
-                            <span class="tag-point">PEP8编程规范</span>
-                            <hr>
-                            <h6>🎯 学习目标</h6>
-                            <p>能够独立搭建Python开发环境，熟练使用编辑器创建、运行、调试代码文件，理解脚本运行逻辑。</p>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>编写代码输出自己的姓名、院校、专业信息，切换到下方【在线练习台】运行测试。</p>
-                            <code>print("樊珍秀｜广科商院 商务数据分析专业")</code>
-                        </div>
-                    </div>
-                    <!-- 第2章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 变量、数据类型与运算符</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">变量命名规则</span>
-                            <span class="tag-point">int/float/str/bool四大基础类型</span>
-                            <span class="tag-point">算术/比较/逻辑运算符</span>
-                            <span class="tag-point">强制类型转换</span>
-                            <hr>
-                            <h6>🎯 学习目标</h6>
-                            <p>掌握数据存储载体变量的使用，区分不同数据类型适用场景，熟练完成数值运算与逻辑判断。</p>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>定义变量存储身高、体重，计算BMI数值并打印结果。</p>
-                        </div>
-                    </div>
-                    <!-- 第3章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 条件分支语句 if</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">if / if-else / if-elif-else</span>
-                            <span class="tag-point">多条件嵌套</span>
-                            <span class="tag-point">区间判断逻辑</span>
-                            <hr>
-                            <h6>🎯 学习目标</h6>
-                            <p>实现多分支业务判断，根据不同条件输出差异化结果。</p>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>输入分数，判断等级（90+优秀，80-89良好，60-79及格，60以下不及格）</p>
-                        </div>
-                    </div>
-                    <!-- 第4章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 循环结构 for / while</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">while循环条件控制</span>
-                            <span class="tag-point">for遍历可迭代对象</span>
-                            <span class="tag-point">break跳出循环</span>
-                            <span class="tag-point">continue跳过单次</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>循环输出1~100所有偶数</p>
-                        </div>
-                    </div>
-                    <!-- 第5章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 序列：列表与元组</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">列表增删改查</span>
-                            <span class="tag-point">切片截取</span>
-                            <span class="tag-point">元组不可变特性</span>
-                            <span class="tag-point">序列通用方法</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>创建商品价格列表，筛选大于100的数值存入新列表</p>
-                        </div>
-                    </div>
-                    <!-- 第6章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 映射与集合：字典、set</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">字典键值对操作</span>
-                            <span class="tag-point">集合自动去重</span>
-                            <span class="tag-point">交集/并集/差集运算</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>用字典存储个人信息（姓名、院校、专业）并遍历输出</p>
-                        </div>
-                    </div>
-                    <!-- 第7章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第7章 自定义函数基础</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">def函数定义</span>
-                            <span class="tag-point">形参、实参、返回值return</span>
-                            <span class="tag-point">局部/全局变量作用域</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>封装求和函数，传入两个数字返回相加结果</p>
-                        </div>
-                    </div>
-                    <!-- 第8章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第8章 文件IO读写操作</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">open()打开文件</span>
-                            <span class="tag-point">with上下文管理器自动关闭</span>
-                            <span class="tag-point">文本/二进制读写</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>将一段专业介绍文本写入txt文档，再读取打印</p>
-                        </div>
-                    </div>
-                    <!-- 第9章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第9章 异常捕获处理 try-except</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">异常捕获语法</span>
-                            <span class="tag-point">常见报错类型</span>
-                            <span class="tag-point">else/finally分支</span>
-                            <hr>
-                            <h6>✍ 随堂练习</h6>
-                            <p>捕获输入数字时的类型错误，给出友好提示</p>
-                        </div>
-                    </div>
-                    <!-- 第10章 -->
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第10章 Python综合小型数据项目</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 核心知识要点</h6>
-                            <span class="tag-point">全语法整合运用</span>
-                            <span class="tag-point">简单数据统计工具开发</span>
-                            <hr>
-                            <h6>✍ 综合实战</h6>
-                            <p>制作学生成绩统计小工具：录入多门成绩，计算平均分、最高分、最低分</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 课程2 数据分析技术 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">2. 数据分析技术</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
+                <!-- 第一行 右 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(2)">
+                        <h5 class="fw-bold">2. 数据分析技术</h5>
+                        <div class="progress my-2">
                             <div class="progress-bar" style="width:30%"></div>
                         </div>
-                        <small class="text-muted">整体进度：30%</small>
+                        <small class="text-muted">学习进度：30% | 10个章节 · 案例练习</small>
+                        <p class="mt-2 mb-0 text-secondary">统计分析、数据清洗、分析方法论、报告撰写</p>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 数据分析行业体系与流程</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">数据分析全流程：采集-清洗-分析-可视化-报告</span>
-                            <span class="tag-point">商务数据分析岗位应用场景</span>
-                            <hr>
-                            <h6>练习任务</h6>
-                            <p>梳理一份电商店铺数据分析完整工作步骤文档</p>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 企业指标体系搭建逻辑</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">流量/转化/营收/用户四大类指标</span>
-                            <span class="tag-point">维度与指标区分</span>
-                            <hr>
-                            <h6>练习任务</h6>
-                            <p>搭建零售门店核心KPI指标清单</p>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 描述性统计分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">均值、中位数、众数</span>
-                            <span class="tag-point">方差、标准差、四分位数</span>
-                            <hr>
-                            <h6>代码练习</h6>
-                            <p>用Python计算一组销售数据的各项统计值</p>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 数据清洗标准化流程</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">缺失值填充/删除</span>
-                            <span class="tag-point">重复值去重</span>
-                            <span class="tag-point">异常值识别处理</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 分组聚合与透视分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">多维度分组拆解</span>
-                            <span class="tag-point">透视表聚合运算</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 对比&结构分析法</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">同比、环比、占比分析</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第7章 时间序列趋势分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">周期波动识别</span>
-                            <span class="tag-point">长期趋势判断</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第8章 变量相关性分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">皮尔逊相关系数</span>
-                            <span class="tag-point">正负相关判断</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第9章 经典分析方法论</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">MECE、5W2H、漏斗、杜邦分析</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第10章 商务数据分析报告撰写</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 知识要点</h6>
-                            <span class="tag-point">报告逻辑结构</span>
-                            <span class="tag-point">图表搭配规范</span>
-                            <span class="tag-point">商务结论输出话术</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 课程3 数据采集与处理 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">3. 数据采集与处理</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
+                <!-- 第二行 左 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(3)">
+                        <h5 class="fw-bold">3. 数据采集与处理</h5>
+                        <div class="progress my-2">
                             <div class="progress-bar" style="width:20%"></div>
                         </div>
-                        <small class="text-muted">整体进度：20%</small>
+                        <small class="text-muted">学习进度：20% | 10个章节 · 爬虫练习</small>
+                        <p class="mt-2 mb-0 text-secondary">网页采集、数据解析、正则、批量数据预处理</p>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 多元化数据来源分类</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">业务数据库、公开数据集、网页、API接口</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 网页爬虫基础原理</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">HTML结构、请求响应流程</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 Requests网络请求库</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">GET/POST、请求头、参数传递</span>
-                            <h6>代码练习</h6>
-                            <p>编写简单requests请求获取网页文本</p>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 BeautifulSoup网页解析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">标签查找、文本/属性提取</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 正则表达式文本提取</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">元字符、批量匹配规则</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 采集数据存储CSV/Excel</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">csv库写入、pandas导出表格</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第7章 反爬机制基础应对</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">UA伪装、延时访问、访问频率控制</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第8章 结构化数据规整</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">行列转换、字段拆分合并</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第9章 批量数据预处理</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">编码统一、格式标准化</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第10章 完整爬虫采集实战项目</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>实战任务</h6>
-                            <p>完成小型商品信息爬虫，采集、清洗、存储全流程</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 课程4 供应链数据分析 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">4. 供应链数据分析</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
+                <!-- 第二行 右 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(4)">
+                        <h5 class="fw-bold">4. 供应链数据分析</h5>
+                        <div class="progress my-2">
                             <div class="progress-bar" style="width:25%"></div>
                         </div>
-                        <small class="text-muted">整体进度：25%</small>
+                        <small class="text-muted">学习进度：25% | 10个章节 · 业务分析</small>
+                        <p class="mt-2 mb-0 text-secondary">采购、仓储、物流、库存与供应链风险分析</p>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 供应链全链路与数据价值</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">采购-仓储-物流-销售链路</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 供应链核心运营指标</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">库存周转率、缺货率、履约时效、采购成本</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 采购环节数据分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">供应商评级、采购量预测、价格波动分析</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 仓储库存数据分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">安全库存测算、畅销/滞销品识别、库存预警</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 出入库流水数据统计</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">时段出入库分析、异常单据排查</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 物流配送数据分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">配送时效、区域分布、物流成本拆解</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第7章 市场需求短期预测</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">历史销量拟合、简单时序预测</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第8章 供应链风险数据分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">断货、积压、成本上涨风险识别</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第9章 供应链数据可视化看板</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">链路图表、核心指标监控大屏设计</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第10章 企业供应链综合案例分析</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>实战任务</h6>
-                            <p>使用企业模拟供应链数据完成全维度分析报告</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 课程5 数据库原理与应用 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">5. 数据库原理与应用</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
+                <!-- 第三行 左 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(5)">
+                        <h5 class="fw-bold">5. 数据库原理与应用</h5>
+                        <div class="progress my-2">
                             <div class="progress-bar" style="width:35%"></div>
                         </div>
-                        <small class="text-muted">整体进度：35%</small>
+                        <small class="text-muted">学习进度：35% | 10个章节 · SQL练习</small>
+                        <p class="mt-2 mb-0 text-secondary">MySQL基础、数据表设计、增删改查、多表查询</p>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 数据库基础概念体系</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
+                <!-- 第三行 右 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(6)">
+                        <h5 class="fw-bold">6. Excel高级数据应用</h5>
+                        <div class="progress my-2">
+                            <div class="progress-bar" style="width:50%"></div>
                         </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">DB/DBMS、关系型数据库核心特点</span>
-                        </div>
+                        <small class="text-muted">学习进度：50% | 10个章节 · 函数练习</small>
+                        <p class="mt-2 mb-0 text-secondary">高级函数、数据透视表、动态图表、商务报表</p>
                     </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 E-R模型与三大范式</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
+                </div>
+                <!-- 第四行 左 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(7)">
+                        <h5 class="fw-bold">7. 统计学基础</h5>
+                        <div class="progress my-2">
+                            <div class="progress-bar" style="width:30%"></div>
                         </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">实体-联系图、数据表三范式设计规范</span>
-                        </div>
+                        <small class="text-muted">学习进度：30% | 10个章节 · 计算练习</small>
+                        <p class="mt-2 mb-0 text-secondary">描述统计、概率、分布、抽样与假设检验</p>
                     </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 MySQL环境部署与连接</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
+                </div>
+                <!-- 第四行 右 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(8)">
+                        <h5 class="fw-bold">8. 数据可视化设计</h5>
+                        <div class="progress my-2">
+                            <div class="progress-bar" style="width:28%"></div>
                         </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">服务启停、客户端连接、基础命令行</span>
-                        </div>
+                        <small class="text-muted">学习进度：28% | 10个章节 · 绘图练习</small>
+                        <p class="mt-2 mb-0 text-secondary">图表选型、Python绘图、数据看板设计</p>
                     </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 库、表结构管理</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
+                </div>
+                <!-- 第五行 左 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(9)">
+                        <h5 class="fw-bold">9. 商务智能应用</h5>
+                        <div class="progress my-2">
+                            <div class="progress-bar" style="width:22%"></div>
                         </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">CREATE/DROP库表、字段类型、主键外键</span>
-                            <h6>SQL练习</h6>
-                            <p>创建学生信息数据表，定义合理字段</p>
-                        </div>
+                        <small class="text-muted">学习进度：22% | 10个章节 · BI练习</small>
+                        <p class="mt-2 mb-0 text-secondary">BI架构、数据建模、交互式报表制作</p>
                     </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 SELECT单表查询语法</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
+                </div>
+                <!-- 第五行 右 -->
+                <div class="col-md-6">
+                    <div class="course-card-home" onclick="openCourse(10)">
+                        <h5 class="fw-bold">10. 大数据导论</h5>
+                        <div class="progress my-2">
+                            <div class="progress-bar" style="width:18%"></div>
                         </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">WHERE筛选、ORDER BY排序、LIMIT限制</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 增删改操作 INSERT/UPDATE/DELETE</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">数据插入、更新、安全删除规范</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第7章 聚合函数与分组GROUP BY</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">SUM/COUNT/AVG、HAVING过滤分组</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第8章 多表关联查询 JOIN</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">内连接、左连接、右连接、多表联合</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第9章 索引与视图优化</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">索引加速查询、视图简化复杂SQL</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第10章 业务数据库综合设计实战</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>实战任务</h6>
-                            <p>设计一套小型电商订单数据库，完成建表、关联查询全套SQL</p>
-                        </div>
+                        <small class="text-muted">学习进度：18% | 10个章节 · 概念练习</small>
+                        <p class="mt-2 mb-0 text-secondary">大数据特征、技术生态、分布式存储与计算</p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 课程6 Excel高级数据应用 -->
-            <div class="course-card">
-                <div class="card-header-bar" onclick="toggleCourseCard(this)">
-                    <h5 class="mb-0 fw-semibold">6. Excel高级数据应用</h5>
-                    <div class="progress-small">
-                        <div class="progress" style="height:8px">
-                            <div class="progress-bar" style="width:50%"></div>
+        <!-- ========== 课程详情页（动态切换） ========== -->
+        <div id="course-detail" class="course-detail">
+            <button class="btn btn-outline-primary back-btn" onclick="showHome()">
+                <i class="bi bi-arrow-left"></i> 返回课程首页
+            </button>
+            <h4 id="course-title" class="fw-bold mb-4"></h4>
+
+            <!-- 在线统一练习面板（全局共用，所有章节都能用） -->
+            <div class="practice-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-code-slash text-primary me-2"></i>在线代码练习台</h5>
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-primary me-2" onclick="switchLang('python')">Python</button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="switchLang('sql')">SQL</button>
+                    <span class="text-muted ms-2">当前语言：<span id="lang-text">Python</span></span>
+                </div>
+                <textarea id="code-area" class="code-editor" placeholder="在此输入代码，点击运行按钮执行..."></textarea>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="runCode()">
+                        <i class="bi bi-play-fill"></i> 运行代码
+                    </button>
+                    <button class="btn btn-outline-secondary ms-2" onclick="clearCode()">清空</button>
+                </div>
+                <div class="mt-3">
+                    <p class="mb-1 text-light">运行结果：</p>
+                    <div id="run-output" class="run-result">等待运行...</div>
+                </div>
+            </div>
+
+            <!-- 章节容器 -->
+            <div id="chapter-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentLang = "python";
+        let courseData = {
+            1: {
+                title: "1. Python基础",
+                chapters: [
+                    {
+                        title: "第1章 Python环境搭建与入门",
+                        points: ["Python解释器安装", "Anaconda配置", "VS Code使用", "编程规范"],
+                        exercise: "输出个人信息\n示例代码：\nprint('樊珍秀 | 广科 商务数据分析专业')",
+                        code: "print('樊珍秀 | 广东科学技术职业学院 商务数据分析与应用专业')"
+                    },
+                    {
+                        title: "第2章 变量、数据类型与运算符",
+                        points: ["变量命名", "四大基础类型", "算术/逻辑运算符", "类型转换"],
+                        exercise: "定义变量计算两数之和",
+                        code: "a = 10\nb = 20\nprint(a + b)"
+                    },
+                    {
+                        title: "第3章 条件分支语句 if",
+                        points: ["if/else/elif", "条件嵌套", "区间判断"],
+                        exercise: "判断分数等级",
+                        code: "score = 85\nif score >= 90:\n    print('优秀')\nelif score >= 60:\n    print('及格')\nelse:\n    print('不及格')"
+                    },
+                    {
+                        title: "第4章 循环结构 for/while",
+                        points: ["while循环", "for遍历", "break/continue"],
+                        exercise: "输出1-10偶数",
+                        code: "for i in range(1,11):\n    if i % 2 == 0:\n        print(i)"
+                    },
+                    {
+                        title: "第5章 列表与元组",
+                        points: ["列表增删改查", "切片", "元组特性"],
+                        exercise: "筛选列表中大于50的数字",
+                        code: "lst = [12,66,34,78,22]\nnew_lst = [x for x in lst if x>50]\nprint(new_lst)"
+                    },
+                    {
+                        title: "第6章 字典与集合",
+                        points: ["字典键值操作", "集合去重", "集合运算"],
+                        exercise: "用字典存储个人信息并遍历",
+                        code: "info = {'name':'樊珍秀','major':'商务数据分析'}\nfor k,v in info.items():\n    print(k, v)"
+                    },
+                    {
+                        title: "第7章 自定义函数",
+                        points: ["def定义函数", "参数与返回值", "变量作用域"],
+                        exercise: "封装求和函数",
+                        code: "def add(x,y):\n    return x+y\nprint(add(3,5))"
+                    },
+                    {
+                        title: "第8章 文件读写",
+                        points: ["open函数", "with上下文", "文本读写"],
+                        exercise: "写入文本并读取",
+                        code: "with open('test.txt','w',encoding='utf-8') as f:\n    f.write('数据分析学习')\nwith open('test.txt','r',encoding='utf-8') as f:\n    print(f.read())"
+                    },
+                    {
+                        title: "第9章 异常处理",
+                        points: ["try-except捕获", "常见异常类型"],
+                        exercise: "捕获类型错误",
+                        code: "try:\n    num = int('abc')\nexcept ValueError:\n    print('类型转换失败')"
+                    },
+                    {
+                        title: "第10章 Python综合实战",
+                        points: ["全语法整合", "数据统计工具"],
+                        exercise: "成绩统计：计算平均分",
+                        code: "scores = [88,92,79,85]\navg = sum(scores)/len(scores)\nprint('平均分：',avg)"
+                    }
+                ]
+            },
+            2: {
+                title: "2. 数据分析技术",
+                chapters: [
+                    {title:"第1章 数据分析流程",points:["采集-清洗-分析-可视化-报告"],exercise:"简述数据分析五大步骤",code:"print('1.数据采集 2.数据清洗 3.数据分析 4.可视化 5.报告输出')"},
+                    {title:"第2章 指标体系搭建",points:["流量/转化/营收指标","维度与指标"],exercise:"列举3个电商核心指标",code:"print('访客数、转化率、客单价')"},
+                    {title:"第3章 描述性统计",points:["均值、中位数、方差、标准差"],exercise:"计算一组数据均值",code:"import statistics\ndata = [12,15,18,20]\nprint(statistics.mean(data))"},
+                    {title:"第4章 数据清洗",points:["缺失值、重复值、异常值"],exercise:"列表去重",code:"lst = [1,2,2,3,3,4]\nprint(list(set(lst)))"},
+                    {title:"第5章 分组聚合",points:["多维度分组、聚合计算"],exercise:"分组求和",code:"# 模拟分组逻辑\nprint('按类别分组后求和')"},
+                    {title:"第6章 对比分析",points:["同比、环比、占比"],exercise:"计算占比",code:"total = 100\npart = 25\nprint('占比：', part/total)"},
+                    {title:"第7章 趋势分析",points:["时间序列、周期波动"],exercise:"输出时序数据",code:"trend = [10,12,15,19]\nprint('月度数据：',trend)"},
+                    {title:"第8章 相关性分析",points:["相关系数、正负相关"],exercise:"简单关联判断",code:"print('数值同向变化为正相关')"},
+                    {title:"第9章 分析方法论",points:["MECE、5W2H、漏斗分析"],exercise:"写出5W2H",code:"print('What/Why/Who/When/Where/How/How much')"},
+                    {title:"第10章 分析报告撰写",points:["报告结构、图表搭配、结论输出"],exercise:"报告三大模块",code:"print('现状分析-问题挖掘-优化建议')"}
+                ]
+            },
+            3: {
+                title: "3. 数据采集与处理",
+                chapters: [
+                    {title:"第1章 数据来源分类",points:["业务库、网页、API、公开数据集"],exercise:"列举4种数据来源",code:"print('数据库、网页、接口、本地文件')"},
+                    {title:"第2章 网页爬虫基础",points:["HTML结构、请求响应"],exercise:"理解网页请求",code:"print('客户端发起请求，服务器返回数据')"},
+                    {title:"第3章 Requests请求",points:["GET/POST、请求头"],exercise:"简单网络请求",code:"# 模拟请求\nprint('使用requests.get()发起网页请求')"},
+                    {title:"第4章 BeautifulSoup解析",points:["标签查找、内容提取"],exercise:"解析网页标签",code:"print('通过标签名、class定位内容')"},
+                    {title:"第5章 正则表达式",points:["元字符、批量匹配"],exercise:"匹配数字",code:"import re\ntext='价格：99元'\nres = re.findall(r'\\d+',text)\nprint(res)"},
+                    {title:"第6章 数据存入表格",points:["CSV/Excel写入"],exercise:"写入CSV",code:"import csv\nwith open('data.csv','w',newline='') as f:\n    w = csv.writer(f)\n    w.writerow(['姓名','专业'])"},
+                    {title:"第7章 反爬基础",points:["UA伪装、延时访问"],exercise:"添加请求头",code:"print('设置User-Agent模拟浏览器')"},
+                    {title:"第8章 结构化整理",points:["行列转换、字段拆分"],exercise:"字符串拆分",code:"s = '樊珍秀,商务数据分析'\nprint(s.split(','))"},
+                    {title:"第9章 批量预处理",points:["编码统一、格式标准化"],exercise:"去除空格",code:"s = '  数据分析  '\nprint(s.strip())"},
+                    {title:"第10章 爬虫综合实战",points:["全流程采集清洗存储"],exercise:"综合爬虫思路",code:"print('请求→解析→清洗→存储')"}
+                ]
+            },
+            4: {
+                title: "4. 供应链数据分析",
+                chapters: [
+                    {title:"第1章 供应链全链路",points:["采购-仓储-物流-销售"],exercise:"简述供应链链路",code:"print('采购→入库存储→物流配送→终端销售')"},
+                    {title:"第2章 供应链核心指标",points:["库存周转率、缺货率、履约时效"],exercise:"写出库存周转率公式",code:"print('库存周转率 = 销售成本 / 平均库存')"},
+                    {title:"第3章 采购数据分析",points:["供应商评估、价格分析"],exercise:"统计采购总量",code:"purchase = [100,120,90]\nprint(sum(purchase))"},
+                    {title:"第4章 仓储库存分析",points:["安全库存、畅滞销品"],exercise:"判断库存状态",code:"stock = 20\nif stock < 30:\n    print('库存偏低')"},
+                    {title:"第5章 出入库统计",points:["流水统计、异常排查"],exercise:"出入库差值计算",code:"in_num = 50\nout_num = 30\nprint('当前库存：',in_num-out_num)"},
+                    {title:"第6章 物流配送分析",points:["时效、成本、区域分布"],exercise:"计算平均配送时长",code:"time_list = [2,3,2.5]\nprint(sum(time_list)/len(time_list))"},
+                    {title:"第7章 需求预测",points:["历史销量拟合、短期预判"],exercise:"趋势简单预测",code:"sale = [20,22,25]\nprint('下月预估：', sale[-1]+3)"},
+                    {title:"第8章 供应链风险",points:["断货、积压、成本风险"],exercise:"识别积压库存",code:"stock = 100\nsale = 20\nif stock > sale*5:\n    print('库存积压')"},
+                    {title:"第9章 供应链可视化",points:["链路图、监控看板"],exercise:"选择合适图表",code:"print('库存变化使用折线图')"},
+                    {title:"第10章 综合案例分析",points:["企业全链路数据分析"],exercise:"分析流程梳理",code:"print('指标查看→异常定位→原因分析→建议')"}
+                ]
+            },
+            5: {
+                title: "5. 数据库原理与应用",
+                chapters: [
+                    {title:"第1章 数据库基础",points:["DB/DBMS、关系型数据库"],exercise:"数据库作用",code:"-- SQL注释\n-- 存储、管理海量结构化数据"},
+                    {title:"第2章 E-R模型与三范式",points:["实体、联系、设计规范"],exercise:"设计学生表字段",code:"-- 学生表：id,姓名,专业"},
+                    {title:"第3章 MySQL环境",points:["服务启停、客户端连接"],exercise:"连接数据库命令",code:"-- mysql -u root -p"},
+                    {title:"第4章 库表管理",points:["建库、建表、主键外键"],exercise:"创建数据表",code:"CREATE TABLE student(id INT,name VARCHAR(20));"},
+                    {title:"第5章 单表查询SELECT",points:["条件筛选、排序、限制"],exercise:"查询所有数据",code:"SELECT * FROM student;"},
+                    {title:"第6章 增删改操作",points:["INSERT/UPDATE/DELETE"],exercise:"插入数据",code:"INSERT INTO student VALUES(1,'樊珍秀');"},
+                    {title:"第7章 聚合与分组",points:["SUM/COUNT/GROUP BY"],exercise:"统计行数",code:"SELECT COUNT(*) FROM student;"},
+                    {title:"第8章 多表连接",points:["内连接、左连接"],exercise:"两表关联查询",code:"SELECT * FROM a JOIN b ON a.id=b.id;"},
+                    {title:"第9章 索引与视图",points:["索引加速、视图简化查询"],exercise:"创建索引",code:"CREATE INDEX idx_name ON student(name);"},
+                    {title:"第10章 数据库综合实战",points:["业务库设计、全套SQL"],exercise:"订单表查询",code:"SELECT * FROM `order` WHERE money>100;"}
+                ]
+            },
+            6: {
+                title: "6. Excel高级数据应用",
+                chapters: [
+                    {title:"第1章 Excel基础设置",points:["工作表、视图、格式"],exercise:"冻结首行",code:"print('视图→冻结窗格→冻结首行')"},
+                    {title:"第2章 单元格格式",points:["数值、日期、数据有效性"],exercise:"设置日期格式",code:"print('右键单元格→设置单元格格式→日期')"},
+                    {title:"第3章 基础统计函数",points:["SUM/MAX/MIN/COUNT"],exercise:"求和",code:"print('=SUM(A1:A10)')"},
+                    {title:"第4章 逻辑函数",points:["IF/AND/OR"],exercise:"条件判断",code:"print('=IF(A1>=60,\"及格\",\"不及格\")')"},
+                    {title:"第5章 查找函数",points:["VLOOKUP/XLOOKUP"],exercise:"跨列查找",code:"print('=VLOOKUP(查找值,区域,列数,匹配类型)')"},
+                    {title:"第6章 文本函数",points:["LEFT/RIGHT/MID"],exercise:"截取字符",code:"print('=MID(A1,1,3)')"},
+                    {title:"第7章 排序筛选",points:["高级筛选、条件格式"],exercise:"高亮大于90分数",code:"print('开始→条件格式→突出显示单元格')"},
+                    {title:"第8章 数据透视表",points:["字段布局、分组、切片器"],exercise:"创建透视表",code:"print('插入→数据透视表')"},
+                    {title:"第9章 图表制作",points:["柱状图、折线图、组合图"],exercise:"制作销量折线图",code:"print('选中数据→插入→折线图')"},
+                    {title:"第10章 商务报表实战",points:["自动化报表、模板"],exercise:"报表结构",code:"print('标题→指标→图表→结论')"}
+                ]
+            },
+            7: {
+                title: "7. 统计学基础",chapters:[{title:"第1章 统计概述",points:["描述统计、推断统计"],exercise:"区分两类统计",code:"print('描述：总结现有数据；推断：由样本估总体')"},{title:"第2章 频数分布",points:["频数表、统计图表"],exercise:"统计频次",code:"data=[1,2,2,3,3,3]\nfrom collections import Counter\nprint(Counter(data))"},{title:"第3章 集中趋势",points:["均值、中位数、众数"],exercise:"计算中位数",code:"import statistics\nprint(statistics.median([12,15,18]))"},{title:"第4章 离散程度",points:["方差、标准差、极差"],exercise:"计算极差",code:"lst=[5,12,8,20]\nprint(max(lst)-min(lst))"},{title:"第5章 概率基础",points:["古典概率、条件概率"],exercise:"简单概率计算",code:"print('3个球取1个，概率 1/3')"},{title:"第6章 随机分布",points:["正态分布、二项分布"],exercise:"正态分布特点",code:"print('中间高、两边低、左右对称')"},{title:"第7章 抽样分布",points:["简单随机抽样"],exercise:"抽样思路",code:"print('从总体中随机抽取部分样本')"},{title:"第8章 参数估计",points:["点估计、区间估计"],exercise:"样本估计总体",code:"print('用样本均值估计总体均值')"},{title:"第9章 假设检验",points:["原假设、备择假设"],exercise:"提出假设",code:"print('H0:原假设  H1:备择假设')"},{title:"第10章 统计商务应用",points:["市场调研、经营分析"],exercise:"调研数据分析",code:"print('问卷数据清洗+统计+结论')"}]
+            },
+            8: {
+                title: "8. 数据可视化设计",chapters:[{title:"第1章 可视化原则",points:["视觉规范、配色、布局"],exercise:"可视化目的",code:"print('直观传递数据信息')"},{title:"第2章 图表选型",points:["不同场景匹配图表"],exercise:"对比用什么图",code:"print('类别对比 → 柱状图')"},{title:"第3章 基础图表绘制",points:["柱状/折线/饼图"],exercise:"简单绘图",code:"import matplotlib.pyplot as plt\nplt.plot([1,2,3],[2,4,3])\n# 本地运行可显示图表"},{title:"第4章 进阶图表",points:["漏斗图、热力图、地图"],exercise:"流程分析选漏斗图",code:"print('转化流程使用漏斗图')"},{title:"第5章 图表美化",points:["字体、配色、图例"],exercise:"图表优化要点",code:"print('配色统一、图例清晰、标题明确')"},{title:"第6章 Excel可视化",points:["动态图表、组合图"],exercise:"制作组合图",code:"print('选中多组数据→插入组合图')"},{title:"第7章 Matplotlib绘图",points:["多子图、样式调整"],exercise:"绘制双折线",code:"import matplotlib.pyplot as plt\nx=[1,2,3]\ny1=[2,3,4]\ny2=[4,3,2]\nplt.plot(x,y1,x,y2)"},{title:"第8章 Seaborn绘图",points:["统计高颜值图表"],exercise:"分布直方图",code:"print('seaborn.histogram()绘制分布')"},{title:"第9章 数据看板",points:["大屏布局、指标排版"],exercise:"看板模块划分",code:"print('核心指标区、趋势区、明细区')"},{title:"第10章 可视化综合项目",points:["全流程可视化报告"],exercise:"完整流程",code:"print('原始数据→处理→绘图→排版输出')"}]
+            },
+            9: {
+                title: "9. 商务智能应用",chapters:[{title:"第1章 BI概念",points:["BI定义、应用价值"],exercise:"BI作用",code:"print('整合数据，辅助商业决策')"},{title:"第2章 BI架构",points:["数据层、计算层、展示层"],exercise:"三层架构",code:"print('数据源→计算引擎→可视化展示')"},{title:"第3章 主流BI工具",points:["Power BI、FineBI"],exercise:"工具特点",code:"print('拖拽式操作，零代码做报表')"},{title:"第4章 数据建模",points:["维度表、事实表"],exercise:"区分维度与指标",code:"print('维度：分类；指标：数值')"},{title:"第5章 数据整合",points:["多数据源接入、清洗"],exercise:"多表合并",code:"print('将业务多表关联整合')"},{title:"第6章 度量值计算",points:["自定义指标、DAX基础"],exercise:"新增计算指标",code:"print('基于原始字段计算衍生指标')"},{title:"第7章 交互式报表",points:["切片器、联动、钻取"],exercise:"切片器作用",code:"print('快速筛选报表数据')"},{title:"第8章 移动端BI",points:["报表发布、移动端查看"],exercise:"报表分享",code:"print('发布链接，手机端直接访问')"},{title:"第9章 企业BI案例",points:["零售、电商BI落地"],exercise:"零售BI分析方向",code:"print('销量、客单价、门店对比')"},{title:"第10章 BI综合实战",points:["独立制作企业看板"],exercise:"看板制作流程",code:"print('导数据→建模→做图表→布局发布')"}]
+            },
+            10: {
+                title: "10. 大数据导论",chapters:[{title:"第1章 大数据特征",points:["4V特征：海量、高速、多样、低价值密度"],exercise:"简述4V",code:"print('Volume、Velocity、Variety、Veracity')"},{title:"第2章 行业应用",points:["政务、金融、零售"],exercise:"大数据金融应用",code:"print('风控、用户画像、精准营销')"},{title:"第3章 技术生态",points:["Hadoop、Spark、Flink"],exercise:"生态组件作用",code:"print('Hadoop存储，Spark计算')"},{title:"第4章 分布式存储",points:["分布式文件系统"],exercise:"分布式优势",code:"print('大容量、高可用、易扩展')"},{title:"第5章 分布式计算",points:["并行计算、任务调度"],exercise:"并行计算特点",code:"print('多节点同时计算，提升速度')"},{title:"第6章 数据采集技术",points:["流式数据采集"],exercise:"流式数据特点",code:"print('实时不间断产生的数据')"},{title:"第7章 大数据预处理",points:["海量数据清洗、转换"],exercise:"大数据清洗难点",code:"print('数据量大、格式复杂')"},{title:"第8章 大数据分析框架",points:["离线分析、实时分析"],exercise:"离线vs实时",code:"print('离线：批量历史数据；实时：即时数据')"},{title:"第9章 大数据可视化",points:["大数据大屏、实时监控"],exercise:"实时大屏作用",code:"print('监控业务动态数据')"},{title:"第10章 大数据综合认知",points:["技术体系、行业发展"],exercise:"学习方向规划",code:"print('编程+数据库+分布式技术')"}]
+            }
+        };
+
+        // 切换页面：显示首页
+        function showHome(){
+            document.getElementById("home-page").style.display = "block";
+            document.getElementById("course-detail").style.display = "none";
+        }
+
+        // 打开对应课程详情
+        function openCourse(id){
+            document.getElementById("home-page").style.display = "none";
+            document.getElementById("course-detail").style.display = "block";
+            let data = courseData[id];
+            document.getElementById("course-title").innerText = data.title;
+            let chapterHtml = "";
+            data.chapters.forEach((item, idx)=>{
+                let pointsHtml = "";
+                item.points.forEach(p=>{
+                    pointsHtml += `<span class="tag">${p}</span>`;
+                });
+                chapterHtml += `
+                <div class="chapter-item">
+                    <div class="chapter-title" onclick="toggleChapter(this)">
+                        <span class="fw-semibold">${item.title}</span>
+                        <button class="btn btn-sm btn-success" onclick="event.stopPropagation();markFinish(this)">标记完成</button>
+                    </div>
+                    <div class="chapter-content">
+                        <div class="mb-2">
+                            <p class="mb-1"><strong>📌 知识要点：</strong></p>
+                            ${pointsHtml}
                         </div>
-                        <small class="text-muted">整体进度：50%</small>
+                        <div class="mb-2">
+                            <p class="mb-1"><strong>✍ 本节练习：</strong></p>
+                            <p class="text-secondary">${item.exercise}</p>
+                        </div>
+                        <div>
+                            <p class="mb-1"><strong>💡 参考代码（可复制到练习区运行）：</strong></p>
+                            <code class="text-primary">${item.code}</code>
+                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyCode('${item.code}')">一键复制代码</button>
+                        </div>
                     </div>
                 </div>
-                <div class="course-card-body">
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第1章 Excel界面与标准化设置</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">工作表管理、视图冻结、打印布局</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第2章 单元格数据格式规范</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">数值/日期/文本格式、数据有效性校验</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第3章 基础统计函数</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">SUM、AVERAGE、MAX、MIN、COUNT系列</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第4章 逻辑条件函数 IF/AND/OR</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">多层IF嵌套、多条件联合判断</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第5章 查找引用函数 VLOOKUP/XLOOKUP</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="tag-point">INDEX+MATCH高级查找</span>
-                        </div>
-                    </div>
-                    <div class="chapter-block" onclick="toggleChapterDetail(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>第6章 文本清洗函数</span>
-                            <button class="btn btn-outline-success btn-sm finish-btn" onclick="event.stopPropagation();markChapterDone(this)">标记本章完成</button>
-                        </div>
-                        <div class="chapter-detail">
-                            <h6>📌 要点</h6>
-                            <span class="
+                `;
+            });
+            document.getElementById("chapter-list").innerHTML = chapterHtml;
+            // 清空练习区
+            document.getElementById("code-area").value = "";
+            document.getElementById("run-output").innerText = "等待运行...";
+        }
+
+        // 展开/收起章节
+        function toggleChapter(el){
+            let content = el.nextElementSibling;
+            content.classList.toggle("active");
+        }
+
+        // 标记章节完成
+        function markFinish(btn){
+            btn.innerText = "已完成";
+            btn.classList.remove("btn-success");
+            btn.classList.add("btn-outline-secondary");
+            btn.disabled = true;
+        }
+
+        // 切换编程语言
+        function switchLang(lang){
+            currentLang = lang;
+            document.getElementById("lang-text").innerText = lang==="python"?"Python":"SQL";
+            let btns = document.querySelectorAll(".practice-box .btn-sm");
+            btns[0].className = lang==="python"?"btn btn-sm btn-primary":"btn btn-sm btn-outline-primary";
+            btns[1].className = lang==="sql"?"btn btn-sm btn-primary":"btn btn-sm btn-outline-primary";
+            document.getElementById("run-output").innerText = "等待运行...";
+        }
+
+        // 运行代码（前端模拟执行，支持基础Python/SQL）
+        function runCode(){
+            let code = document.getElementById("code-area").value;
+            let output = "";
+            try{
+                if(currentLang === "python"){
+                    // 前端简易Python解释器（支持print、基础运算）
+                    const capture = [];
+                    const originalPrint = window.print;
+                    window.print = function(...args){
+                        capture.push(args.join(" "));
+                    };
+                    eval(code);
+                    window.print = originalPrint;
+                    output = capture.join("\n") || "代码执行完成，无输出";
+                }else{
+                    // SQL模拟返回
+                    output = `【SQL模拟执行结果】\n执行语句：\n${code}\n\n执行成功！`;
+                }
+            }catch(e){
+                output = `代码报错：\n${e.message}`;
+            }
+            document.getElementById("run-output").innerText = output;
+        }
+
+        // 清空代码区
+        function clearCode(){
+            document.getElementById("code-area").value = "";
+            document.getElementById("run-output").innerText = "等待运行...";
+        }
+
+        // 一键复制代码
+        function copyCode(text){
+            navigator.clipboard.writeText(text).then(()=>{
+                alert("代码已复制，粘贴到练习区即可运行！");
+            })
+        }
+
+        // 初始化显示首页
+        window.onload = showHome;
+    </script>
+</body>
+</html>
