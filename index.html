@@ -1,179 +1,247 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>商务数据分析学习平台</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        :root{--primary:#165DFF;--primary-light:#e8f1ff;--gray-bg:#f5f7fa;--card-shadow:0 4px 18px rgba(22,93,255,.12);}
-        body{background:#f5f7fa;font-family:"Microsoft YaHei",sans-serif;}
-        .course-card{background:#fff;border-radius:18px;box-shadow:var(--card-shadow);padding:26px;height:100%;cursor:pointer;transition:all .3s;}
-        .course-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(22,93,255,.2);}
-        .chapter-item{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:var(--card-shadow);}
-        .chapter-content-body{display:none;margin-top:20px;padding-top:20px;border-top:1px dashed #e5e6eb;}
-        .chapter-content-body.show{display:block;}
-        .knowledge-panel{background:#f0f7ff;padding:18px;border-radius:10px;margin:16px 0;border-left:4px solid #4096ff;}
-        .exercise-panel{background:#fffef0;padding:18px;border-radius:10px;margin:16px 0;border-left:4px solid #f7ba1e;}
-        .practice-container{background:#fff;border-radius:14px;padding:24px;box-shadow:var(--card-shadow);margin-bottom:24px;}
-        .code-editor{width:100%;min-height:200px;padding:14px;border:1px solid #dcdcdc;border-radius:10px;font-family:Consolas,monospace;}
-        .run-output{background:#161b22;color:#58e182;padding:16px;border-radius:10px;min-height:120px;white-space:pre-wrap;}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>樊珍秀 - 商务数据分析与应用 | 个人学习平台</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<div class="container py-4">
-    <!-- 首页 -->
-    <div id="home-page">
-        <h4 class="fw-bold mb-4">全部课程（点击卡片进入）</h4>
-        <div class="row g-4">
-            <!-- 课程1 -->
-            <div class="col-md-6">
-                <div class="course-card" onclick="openCourse(1)">
-                    <h5 class="fw-bold">1. Python基础编程</h5>
-                    <p class="text-muted">共10章节 · 零基础入门数据分析必备</p>
-                </div>
-            </div>
-            <!-- 课程2 -->
-            <div class="col-md-6">
-                <div class="course-card" onclick="openCourse(2)">
-                    <h5 class="fw-bold">2. 商务数据分析技术</h5>
-                    <p class="text-muted">共10章节 · 全流程分析方法论</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 课程详情页 -->
-    <div id="course-detail" style="display:none;">
-        <button class="btn btn-outline-primary mb-4" onclick="showHome()">
-            <i class="bi bi-arrow-left"></i> 返回首页
-        </button>
-        <h4 id="detail-title" class="fw-bold mb-4"></h4>
-
-        <!-- 代码练习区 -->
-        <div class="practice-container">
-            <h5 class="fw-bold mb-3">在线代码练习区</h5>
-            <textarea id="code-editor" class="code-editor" placeholder="写Python代码，点运行"></textarea>
-            <div class="mt-3">
-                <button class="btn btn-primary" onclick="runCode()">运行代码</button>
-                <button class="btn btn-outline-secondary ms-2" onclick="clearCode()">清空</button>
-            </div>
-            <div class="mt-3">
-                <p>输出结果：</p>
-                <div id="run-output" class="run-output">等待运行...</div>
-            </div>
-        </div>
-
-        <!-- 章节列表 -->
-        <div id="chapters-wrap"></div>
-    </div>
+<!-- Navigation -->
+<nav class="navbar">
+<div class="nav-container">
+<div class="nav-logo">
+<span class="logo-text">樊珍秀</span>
+<span class="logo-sub">商务数据分析</span>
 </div>
-
-<script>
-// 课程数据
-const courseData={
-    1:{
-        title:"1. Python基础编程",
-        chapters:[
-            {
-                title:"第1章 环境搭建与入门",
-                core:["Python是解释型语言","Anaconda集成环境","print()函数使用"],
-                exercise:"用print输出你的姓名和专业",
-                code:'print("姓名：樊珍秀")\nprint("专业：商务数据分析与应用")'
-            },
-            {
-                title:"第2章 变量与数据类型",
-                core:["变量无需声明类型","int/float/str/bool四大类型","算术运算符"],
-                exercise:"定义两个变量并求和",
-                code:'a = 10\nb = 20\nprint("和：",a+b)'
-            }
-        ]
-    },
-    2:{
-        title:"2. 商务数据分析技术",
-        chapters:[
-            {
-                title:"第1章 数据分析流程",
-                core:["五大流程：采集-清洗-分析-可视化-报告","业务驱动数据"],
-                exercise:"写出数据分析五大流程",
-                code:'print("1.采集 2.清洗 3.分析 4.可视化 5.报告")'
-            }
-        ]
-    }
-};
-
-// 显示首页
-function showHome(){
-    document.getElementById("home-page").style.display="block";
-    document.getElementById("course-detail").style.display="none";
-}
-
-// 打开课程（核心跳转，保证能点）
-function openCourse(cid){
-    document.getElementById("home-page").style.display="none";
-    document.getElementById("course-detail").style.display="block";
-    const course=courseData[cid];
-    document.getElementById("detail-title").innerText=course.title;
-
-    let html="";
-    course.chapters.forEach((chap,idx)=>{
-        let coreHtml=chap.core.map(x=>`<span class="badge bg-primary me-1">${x}</span>`).join("");
-        html+=`
-        <div class="chapter-item">
-            <div class="chapter-title-bar" onclick="toggleChap(this)">
-                <h6 class="fw-bold mb-0">${chap.title}</h6>
-                <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="chapter-content-body">
-                <div class="knowledge-panel">
-                    <strong>核心知识点：</strong><br>${coreHtml}
-                </div>
-                <div class="exercise-panel">
-                    <strong>练习任务：</strong><br>${chap.exercise}
-                </div>
-                <div class="code-ref-panel">
-                    <strong>参考代码：</strong><br><pre>${chap.code}</pre>
-                </div>
-            </div>
-        </div>
-        `;
-    });
-    document.getElementById("chapters-wrap").innerHTML=html;
-}
-
-// 展开/收起章节
-function toggleChap(el){
-    const body=el.nextElementSibling;
-    body.classList.toggle("show");
-    const icon=el.querySelector("i");
-    if(body.classList.contains("show")){
-        icon.classList.replace("bi-chevron-down","bi-chevron-up");
-    }else{
-        icon.classList.replace("bi-chevron-up","bi-chevron-down");
-    }
-}
-
-// 运行Python代码（真能跑）
-function runCode(){
-    const code=document.getElementById("code-editor").value;
-    const out=document.getElementById("run-output");
-    try{
-        let res="";
-        const oldPrint=window.print;
-        window.print=(...args)=>res+=args.join(" ")+"\n";
-        eval(code);
-        window.print=oldPrint;
-        out.innerText=res||"执行完成，无输出";
-    }catch(e){
-        out.innerText="错误："+e.message;
-    }
-}
-
-// 清空编辑器
-function clearCode(){
-    document.getElementById("code-editor").value="";
-    document.getElementById("run-output").innerText="等待运行...";
-}
-</script>
+<ul class="nav-menu">
+<li><a href="#home" class="nav-link active">首页</a></li>
+<li><a href="#about" class="nav-link">关于我</a></li>
+<li><a href="#courses" class="nav-link">课程中心</a></li>
+<li><a href="#skills" class="nav-link">技能</a></li>
+<li><a href="#contact" class="nav-link">联系</a></li>
+</ul>
+<button class="nav-toggle" id="navToggle">
+<span></span><span></span><span></span>
+</button>
+</div>
+</nav>
+ 
+<!-- Hero Section -->
+<section id="home" class="hero">
+<div class="hero-bg">
+<div class="gradient-circle circle-1"></div>
+<div class="gradient-circle circle-2"></div>
+<div class="gradient-circle circle-3"></div>
+</div>
+<div class="hero-content">
+<div class="hero-text">
+<div class="hero-badge">
+<span class="badge-dot"></span>
+<span>广东科学技术职业学院 · 商学院</span>
+</div>
+<h1 class="hero-title">
+<span class="title-line">你好，我是</span>
+<span class="title-name">樊珍秀</span>
+<span class="title-gradient">商务数据分析与应用</span>
+</h1>
+<p class="hero-description">
+专注于数据采集、处理、分析与可视化，用数据洞察商业价值。
+探索以下课程，了解我的学习路径与专业技能。
+</p>
+<div class="hero-stats">
+<div class="stat-item">
+<span class="stat-value" data-count="10">0</span>
+<span class="stat-label">核心课程</span>
+</div>
+<div class="stat-item">
+<span class="stat-value" data-count="100">0</span>
+<span class="stat-label">章节知识</span>
+</div>
+<div class="stat-item">
+<span class="stat-value" data-count="300">0</span>
+<span class="stat-label">练习项目</span>
+</div>
+</div>
+<div class="hero-actions">
+<a href="#courses" class="btn btn-primary">
+<span>浏览课程</span>
+<i class="fas fa-arrow-right"></i>
+</a>
+<a href="#about" class="btn btn-secondary">
+<span>了解更多</span>
+</a>
+</div>
+</div>
+<div class="hero-visual">
+<div class="avatar-container">
+<div class="avatar-ring"></div>
+<div class="avatar-ring-2"></div>
+<div class="avatar-main">
+<i class="fas fa-user-graduate"></i>
+</div>
+<div class="floating-card card-1">
+<i class="fas fa-chart-line"></i>
+<span>数据分析</span>
+</div>
+<div class="floating-card card-2">
+<i class="fas fa-database"></i>
+<span>数据库</span>
+</div>
+<div class="floating-card card-3">
+<i class="fas fa-code"></i>
+<span>Python</span>
+</div>
+</div>
+</div>
+</div>
+<div class="scroll-hint">
+<span>向下滚动探索</span>
+<div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+</div>
+</section>
+ 
+<!-- About Section -->
+<section id="about" class="about">
+<div class="container">
+<div class="section-header">
+<span class="section-tag">关于我</span>
+<h2 class="section-title">用数据驱动决策</h2>
+<p class="section-desc">专注于数据分析全流程，从数据采集到智能分析</p>
+</div>
+<div class="about-grid">
+<div class="about-card">
+<div class="card-icon">
+<i class="fas fa-graduation-cap"></i>
+</div>
+<h3>专业背景</h3>
+<p>就读于广东科学技术职业学院商学院商务数据分析与应用专业，系统学习数据分析相关课程。</p>
+</div>
+<div class="about-card">
+<div class="card-icon">
+<i class="fas fa-tools"></i>
+</div>
+<h3>核心技能</h3>
+<p>熟练掌握Python、SQL、数据分析工具，具备数据采集、清洗、分析及可视化全流程能力。</p>
+</div>
+<div class="about-card">
+<div class="card-icon">
+<i class="fas fa-bullseye"></i>
+</div>
+<h3>学习目标</h3>
+<p>致力于成为一名优秀的商业数据分析师，用数据发现商业机会，为决策提供数据支持。</p>
+</div>
+<div class="about-card">
+<div class="card-icon">
+<i class="fas fa-star"></i>
+</div>
+<h3>个人理念</h3>
+<p>数据是新时代的石油，分析是提炼的工艺。用严谨的数据分析，创造真实的商业价值。</p>
+</div>
+</div>
+</div>
+</section>
+ 
+<!-- Skills Section -->
+<section id="skills" class="skills">
+<div class="container">
+<div class="section-header">
+<span class="section-tag">技能标签</span>
+<h2 class="section-title">我的核心技能</h2>
+<p class="section-desc">涵盖数据分析全栈技能，从编程到商业分析</p>
+</div>
+<div class="skills-container" id="skillsContainer">
+<!-- Skills will be loaded by JS -->
+</div>
+</div>
+</section>
+ 
+<!-- Courses Section -->
+<section id="courses" class="courses">
+<div class="container">
+<div class="section-header">
+<span class="section-tag">课程中心</span>
+<h2 class="section-title">我的学习课程</h2>
+<p class="section-desc">10门核心课程，每门10章节，系统学习商务数据分析</p>
+</div>
+<div class="course-grid" id="courseGrid">
+<!-- Courses will be loaded by JS -->
+</div>
+</div>
+</section>
+ 
+<!-- Course Detail Modal -->
+<div class="modal" id="courseModal">
+<div class="modal-overlay" id="modalOverlay"></div>
+<div class="modal-content">
+<button class="modal-close" id="modalClose">
+<i class="fas fa-times"></i>
+</button>
+<div class="modal-header" id="modalHeader">
+<!-- Course header content -->
+</div>
+<div class="modal-body" id="modalBody">
+<!-- Course chapters will be loaded by JS -->
+</div>
+</div>
+</div>
+ 
+<!-- Chapter Detail Panel -->
+<div class="chapter-panel" id="chapterPanel">
+<div class="chapter-content">
+<button class="chapter-close" id="chapterClose">
+<i class="fas fa-times"></i>
+</button>
+<div id="chapterDetail">
+<!-- Chapter detail content -->
+</div>
+</div>
+</div>
+ 
+<!-- Contact Section -->
+<section id="contact" class="contact">
+<div class="container">
+<div class="contact-wrapper">
+<div class="contact-info">
+<span class="section-tag">联系我</span>
+<h2>让我们一起探索数据的力量</h2>
+<p>欢迎交流数据分析学习心得，共同成长。</p>
+<div class="contact-items">
+<div class="contact-item">
+<i class="fas fa-envelope"></i>
+<span>fan@example.com</span>
+</div>
+<div class="contact-item">
+<i class="fas fa-university"></i>
+<span>广东科学技术职业学院</span>
+</div>
+<div class="contact-item">
+<i class="fas fa-map-marker-alt"></i>
+<span>中国·广东</span>
+</div>
+</div>
+</div>
+<div class="contact-visual">
+<div class="contact-orb">
+<i class="fas fa-chart-pie"></i>
+</div>
+</div>
+</div>
+</div>
+</section>
+ 
+<!-- Footer -->
+<footer class="footer">
+<div class="container">
+<div class="footer-content">
+<p>&copy; 2024 樊珍秀 · 商务数据分析与应用 | 保留所有权利</p>
+<p class="footer-motto">用数据发现价值，用分析创造未来</p>
+</div>
+</div>
+</footer>
+ 
+<script src="assets/js/courses.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
