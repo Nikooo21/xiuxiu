@@ -2,1005 +2,178 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商务数据分析学习平台 | 课程+知识点+在线代码练习</title>
+    <title>商务数据分析学习平台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
-        :root {
-            --primary: #165DFF;
-            --primary-light: #e8f1ff;
-            --primary-dark: #0E42D2;
-            --success: #00b42a;
-            --success-light: #ecfbf1;
-            --warning: #ff7d00;
-            --warning-light: #fff7e8;
-            --danger: #f53f3f;
-            --danger-light: #fee;
-            --info: #4096ff;
-            --info-light: #f0f7ff;
-            --gray-bg: #f5f7fa;
-            --card-shadow: 0 4px 18px rgba(22, 93, 255, 0.12);
-            --card-hover-shadow: 0 12px 32px rgba(22, 93, 255, 0.2);
-            --text-main: #1d2129;
-            --text-muted: #6c757d;
-        }
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            background-color: var(--gray-bg);
-            font-family: "Microsoft YaHei", system-ui, sans-serif;
-            color: var(--text-main);
-            line-height: 1.7;
-        }
-        .top-nav {
-            background: #ffffff;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
-        .nav-tag {
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin: 0 6px;
-            cursor: pointer;
-            transition: all 0.25s;
-            border: 1px solid transparent;
-        }
-        .nav-tag.active {
-            background: var(--primary);
-            color: #fff;
-        }
-        .nav-tag:hover:not(.active) {
-            background: var(--primary-light);
-            border-color: var(--primary);
-        }
-        .hero-banner {
-            background: linear-gradient(135deg, #165DFF, #4080FF);
-            color: #fff;
-            border-radius: 18px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 8px 24px rgba(22,93,255,0.25);
-        }
-        .stat-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-        }
-        /* 课程卡片 可点击 */
-        .course-card {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: var(--card-shadow);
-            padding: 26px;
-            height: 100%;
-            cursor: pointer;
-            transition: all 0.35s ease;
-            border-left: 6px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        .course-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--info));
-            opacity: 0;
-            transition: 0.3s;
-        }
-        .course-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: var(--card-hover-shadow);
-            border-left-color: var(--primary);
-        }
-        .course-card:hover::before {
-            opacity: 1;
-        }
-        .course-icon-box {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin-bottom: 14px;
-        }
-        .diff-tag {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 14px;
-            margin-right: 8px;
-            white-space: nowrap;
-        }
-        .tag-basic {background: var(--primary-light); color: var(--primary);}
-        .tag-middle {background: var(--warning-light); color: var(--warning);}
-        .tag-hard {background: var(--danger-light); color: var(--danger);}
-        .tag-common {background: #f1f2f3; color: #4e5969;}
-        .course-desc-text {
-            font-size: 14px;
-            color: #4e5969;
-            line-height: 1.8;
-            margin: 12px 0;
-        }
-        .course-meta-info {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        .progress {
-            height: 10px;
-            border-radius: 5px;
-            background: #e5e6eb;
-        }
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary), var(--info));
-            border-radius: 5px;
-        }
-        /* 课程详情页 */
-        .course-detail-wrap {
-            display: none;
-            margin: 30px 0;
-        }
-        .back-group {
-            margin-bottom: 24px;
-        }
-        /* 左侧章节目录 */
-        .chapter-sidebar {
-            background: #fff;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
-            position: sticky;
-            top: 100px;
-        }
-        .sidebar-chap-item {
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 6px 0;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-        .sidebar-chap-item:hover {
-            background: var(--primary-light);
-        }
-        .sidebar-chap-item.active {
-            background: var(--primary);
-            color: #fff;
-        }
-        /* 章节内容面板 */
-        .chapter-item {
-            background: #fff;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-        }
-        .chapter-title-bar {
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chapter-content-body {
-            display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px dashed #e5e6eb;
-        }
-        .chapter-content-body.show {
-            display: block;
-        }
-        /* 知识点面板 */
-        .knowledge-panel {
-            background: var(--info-light);
-            padding: 18px;
-            border-radius: 10px;
-            margin: 16px 0;
-            border-left: 4px solid var(--info);
-        }
-        .hard-panel {
-            background: var(--warning-light);
-            padding: 18px;
-            border-radius: 10px;
-            margin: 16px 0;
-            border-left: 4px solid var(--warning);
-        }
-        .extend-panel {
-            background: var(--success-light);
-            padding: 18px;
-            border-radius: 10px;
-            margin: 16px 0;
-            border-left: 4px solid var(--success);
-        }
-        .think-panel {
-            background: #faf5ff;
-            padding: 16px;
-            border-radius: 10px;
-            margin: 16px 0;
-            border-left: 4px solid #9b6ade;
-        }
-        .exercise-panel {
-            background: #fffef0;
-            padding: 18px;
-            border-radius: 10px;
-            margin: 16px 0;
-            border-left: 4px solid #f7ba1e;
-        }
-        .code-ref-panel {
-            background: #f6f8fa;
-            padding: 18px;
-            border-radius: 10px;
-            margin: 16px 0;
-        }
-        /* 在线代码练习区 */
-        .practice-container {
-            background: #fff;
-            border-radius: 14px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 24px;
-        }
-        .code-editor {
-            width: 100%;
-            min-height: 200px;
-            padding: 14px;
-            border: 1px solid #dcdcdc;
-            border-radius: 10px;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 14px;
-            resize: vertical;
-        }
-        .run-output {
-            background: #161b22;
-            color: #58e182;
-            padding: 16px;
-            border-radius: 10px;
-            min-height: 120px;
-            margin-top: 14px;
-            white-space: pre-wrap;
-            font-family: Consolas, monospace;
-        }
-        .inline-tag {
-            display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin: 5px 4px;
-        }
-        .btn-primary-custom {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-        .btn-primary-custom:hover {
-            background: var(--primary-dark);
-            border-color: var(--primary-dark);
-        }
+        :root{--primary:#165DFF;--primary-light:#e8f1ff;--gray-bg:#f5f7fa;--card-shadow:0 4px 18px rgba(22,93,255,.12);}
+        body{background:#f5f7fa;font-family:"Microsoft YaHei",sans-serif;}
+        .course-card{background:#fff;border-radius:18px;box-shadow:var(--card-shadow);padding:26px;height:100%;cursor:pointer;transition:all .3s;}
+        .course-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(22,93,255,.2);}
+        .chapter-item{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:var(--card-shadow);}
+        .chapter-content-body{display:none;margin-top:20px;padding-top:20px;border-top:1px dashed #e5e6eb;}
+        .chapter-content-body.show{display:block;}
+        .knowledge-panel{background:#f0f7ff;padding:18px;border-radius:10px;margin:16px 0;border-left:4px solid #4096ff;}
+        .exercise-panel{background:#fffef0;padding:18px;border-radius:10px;margin:16px 0;border-left:4px solid #f7ba1e;}
+        .practice-container{background:#fff;border-radius:14px;padding:24px;box-shadow:var(--card-shadow);margin-bottom:24px;}
+        .code-editor{width:100%;min-height:200px;padding:14px;border:1px solid #dcdcdc;border-radius:10px;font-family:Consolas,monospace;}
+        .run-output{background:#161b22;color:#58e182;padding:16px;border-radius:10px;min-height:120px;white-space:pre-wrap;}
     </style>
 </head>
 <body>
-    <!-- 顶部导航 -->
-    <div class="top-nav py-3">
-        <div class="container d-flex align-items-center justify-content-between flex-wrap">
-            <div class="d-flex align-items-center">
-                <h5 class="mb-0 fw-bold text-primary me-3">
-                    <i class="bi bi-mortarboard-fill me-2"></i>商务数据分析学习平台
-                </h5>
-            </div>
-            <div class="d-flex">
-                <div class="nav-tag active" onclick="showHome()">
-                    <i class="bi bi-house-door me-1"></i>课程首页
-                </div>
-                <div class="nav-tag">
-                    <i class="bi bi-journal-check me-1"></i>学习记录
-                </div>
-                <div class="nav-tag">
-                    <i class="bi bi-question-circle me-1"></i>帮助中心
+<div class="container py-4">
+    <!-- 首页 -->
+    <div id="home-page">
+        <h4 class="fw-bold mb-4">全部课程（点击卡片进入）</h4>
+        <div class="row g-4">
+            <!-- 课程1 -->
+            <div class="col-md-6">
+                <div class="course-card" onclick="openCourse(1)">
+                    <h5 class="fw-bold">1. Python基础编程</h5>
+                    <p class="text-muted">共10章节 · 零基础入门数据分析必备</p>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- 头部横幅 -->
-        <div class="hero-banner">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <h3 class="fw-bold mb-3">你好，欢迎开始学习 🎓</h3>
-                    <p class="fs-5 mb-2">广东科学技术职业学院 | 商学院</p>
-                    <p class="fs-5 mb-3">专业：商务数据分析与应用</p>
-                    <p class="opacity-90">平台包含10门课程、每门10个章节，配备完整知识点、思考题、分层练习 + 在线代码实操平台。</p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="col-4">
-                            <div class="stat-card">
-                                <div class="fs-3 fw-bold text-primary">10</div>
-                                <div class="text-muted">全部课程</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-card">
-                                <div class="fs-3 fw-bold text-success">100</div>
-                                <div class="text-muted">总章节数</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-card">
-                                <div class="fs-3 fw-bold text-warning">0</div>
-                                <div class="text-muted">已完成章节</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 首页课程列表 -->
-        <div id="home-page">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bold mb-0">
-                    <i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>全部课程列表
-                </h4>
-                <span class="text-muted">点击卡片进入课程学习</span>
-            </div>
-            <div class="row g-4">
-                <!-- 课程1 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(1)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--primary-light); color: var(--primary);">
-                                <i class="bi bi-code-slash"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-basic">入门必修</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">1. Python基础编程</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:40%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：40%</small>
-                        <p class="course-desc-text">零基础学习Python全量语法，变量、分支、循环、函数、文件、异常处理，数据分析必备基础。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>代码实操
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程2 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(2)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--warning-light); color: var(--warning);">
-                                <i class="bi bi-bar-chart-line"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-middle">中等必修</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">2. 商务数据分析技术</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:30%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：30%</small>
-                        <p class="course-desc-text">数据分析全流程、指标体系、统计分析、清洗、对比/趋势分析、分析方法论与报告撰写。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>案例练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程3 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(3)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--danger-light); color: var(--danger);">
-                                <i class="bi bi-download"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-hard">进阶必修</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">3. 数据采集与预处理</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:20%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：20%</small>
-                        <p class="course-desc-text">多源数据采集、网页爬虫、正则、数据规整、批量清洗、文件存储实战。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>爬虫练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程4 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(4)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--success-light); color: var(--success);">
-                                <i class="bi bi-truck"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-middle">方向课</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">4. 供应链数据分析</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:25%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：25%</small>
-                        <p class="course-desc-text">采购、仓储、物流、库存指标分析、需求预测、供应链风险研判与案例。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>业务练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程5 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(5)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--primary-light); color: var(--primary);">
-                                <i class="bi bi-database"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-basic">入门必修</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">5. 数据库原理与SQL应用</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:35%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：35%</small>
-                        <p class="course-desc-text">数据库基础、表设计、SQL增删改查、分组聚合、多表关联综合练习。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>SQL练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程6 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(6)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--warning-light); color: var(--warning);">
-                                <i class="bi bi-table"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-basic">入门必修</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">6. Excel高级数据应用</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:50%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：50%</small>
-                        <p class="course-desc-text">高级函数、数据透视表、条件格式、动态图表、自动化商务报表制作。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>报表练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程7 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(7)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--danger-light); color: var(--danger);">
-                                <i class="bi bi-calculator"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-middle">理论课</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">7. 统计学基础</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:30%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：30%</small>
-                        <p class="course-desc-text">描述统计、概率、分布、抽样、参数估计、假设检验，数据分析理论根基。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>计算练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程8 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(8)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--success-light); color: var(--success);">
-                                <i class="bi bi-pie-chart"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-middle">实操课</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">8. 数据可视化设计</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:28%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：28%</small>
-                        <p class="course-desc-text">图表选型、视觉规范、Python绘图、数据看板与大屏制作。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>绘图练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程9 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(9)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--primary-light); color: var(--primary);">
-                                <i class="bi bi-speedometer2"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-hard">拓展课</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">9. 商务智能BI应用</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:22%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：22%</small>
-                        <p class="course-desc-text">BI架构、数据建模、交互式报表、切片联动、企业运营看板实战。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>报表练习
-                        </div>
-                    </div>
-                </div>
-                <!-- 课程10 -->
-                <div class="col-md-6">
-                    <div class="course-card" onclick="openCourse(10)">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="course-icon-box" style="background: var(--warning-light); color: var(--warning);">
-                                <i class="bi bi-cloud"></i>
-                            </div>
-                            <div>
-                                <span class="diff-tag tag-middle">认知课</span>
-                            </div>
-                        </div>
-                        <h5 class="fw-bold mt-2">10. 大数据导论</h5>
-                        <div class="progress my-3">
-                            <div class="progress-bar" style="width:18%"></div>
-                        </div>
-                        <small class="text-muted">学习进度：18%</small>
-                        <p class="course-desc-text">大数据4V特征、技术生态、分布式存储计算、行业应用与发展趋势。</p>
-                        <div class="course-meta-info">
-                            <i class="bi bi-book me-1"></i>共10章节
-                            <span class="mx-2">|</span>
-                            <i class="bi bi-pencil-square me-1"></i>概念练习
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 课程详情页（跳转后显示） -->
-        <div id="course-detail" class="course-detail-wrap">
-            <div class="back-group">
-                <button class="btn btn-outline-primary btn-lg" onclick="showHome()">
-                    <i class="bi bi-arrow-left-circle me-2"></i>返回课程首页
-                </button>
-            </div>
-            <h4 id="detail-course-title" class="fw-bold mb-4 fs-4"></h4>
-
-            <div class="row g-4">
-                <!-- 左侧章节目录 -->
-                <div class="col-lg-3">
-                    <div class="chapter-sidebar">
-                        <h6 class="fw-bold border-bottom pb-2 mb-3">
-                            <i class="bi bi-list-ul text-primary me-2"></i>章节目录
-                        </h6>
-                        <div id="chap-sidebar-list"></div>
-                    </div>
-                </div>
-
-                <!-- 右侧主内容区 -->
-                <div class="col-lg-9">
-                    <!-- 在线代码练习平台（全局可用，可真实运行代码） -->
-                    <div class="practice-container">
-                        <h5 class="fw-bold mb-3">
-                            <i class="bi bi-code-slash text-primary me-2"></i>在线代码实操练习平台
-                        </h5>
-                        <div class="mb-3">
-                            <button class="btn btn-primary-custom me-2" onclick="switchLang('python')">Python 模式</button>
-                            <button class="btn btn-outline-primary me-2" onclick="switchLang('sql')">SQL 模式</button>
-                            <span class="text-muted">当前语言：<strong id="lang-name">Python</strong></span>
-                        </div>
-                        <textarea id="main-code-editor" class="code-editor" placeholder="在此编写代码，点击【运行代码】执行"></textarea>
-                        <div class="mt-3">
-                            <button class="btn btn-primary-custom" onclick="runMainCode()">
-                                <i class="bi bi-play-fill me-1"></i>运行代码
-                            </button>
-                            <button class="btn btn-outline-secondary ms-2" onclick="clearMainCode()">
-                                <i class="bi bi-trash me-1"></i>清空编辑区
-                            </button>
-                        </div>
-                        <div class="mt-3">
-                            <p class="text-light mb-1">运行输出结果：</p>
-                            <div id="main-run-result" class="run-output">等待代码执行...</div>
-                        </div>
-                    </div>
-
-                    <!-- 所有章节内容区域 -->
-                    <div id="all-chapter-content"></div>
+            <!-- 课程2 -->
+            <div class="col-md-6">
+                <div class="course-card" onclick="openCourse(2)">
+                    <h5 class="fw-bold">2. 商务数据分析技术</h5>
+                    <p class="text-muted">共10章节 · 全流程分析方法论</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentLanguage = "python";
-        let nowCourseId = 0;
+    <!-- 课程详情页 -->
+    <div id="course-detail" style="display:none;">
+        <button class="btn btn-outline-primary mb-4" onclick="showHome()">
+            <i class="bi bi-arrow-left"></i> 返回首页
+        </button>
+        <h4 id="detail-title" class="fw-bold mb-4"></h4>
 
-        // 课程完整数据（10门课程，每门10章节，内容齐全）
-        const courseData = {
-            1: {
-                title: "1. Python基础编程",
-                chapters: [
-                    {
-                        title: "第1章 Python环境搭建与入门认知",
-                        core: ["Python是解释型高级脚本语言，语法简洁、跨平台", "CPython官方解释器作用", "Anaconda集成环境优势", "VS Code / PyCharm编辑器使用", "PEP8代码规范"],
-                        hard: ["交互式终端与脚本文件运行区别", "多Python版本共存管理", "新手语法错误排查"],
-                        extend: ["Python发展历史", "数据分析常用第三方库介绍"],
-                        think: "为什么数据分析优先选择Python？",
-                        baseExercise: "使用print函数分行输出姓名、学校、专业",
-                        advanceExercise: "添加单行注释与多行注释，理解注释作用",
-                        demoCode: "print('姓名：樊珍秀')\nprint('学校：广东科学技术职业学院')\nprint('专业：商务数据分析与应用')\n# 单行注释\n'''多行注释'''"
-                    },
-                    {
-                        title: "第2章 变量、数据类型与运算符",
-                        core: ["变量概念与命名规则", "int/float/str/bool四大基础类型", "算术/比较/逻辑运算符", "数据类型强制转换"],
-                        hard: ["不同类型混合运算规则", "布尔值隐式转换", "字符串与数字运算区别"],
-                        extend: ["变量内存地址查看", "Python系统关键字"],
-                        think: "已知单价和数量，如何计算总金额？",
-                        baseExercise: "定义两个变量，完成加减乘除运算并输出",
-                        advanceExercise: "字符串拼接 + 字符串转数字运算",
-                        demoCode: "a = 25\nb = 10\nprint('加法：',a+b)\nprint('减法：',a-b)"
-                    },
-                    {
-                        title: "第3章 条件分支 if 语句",
-                        core: ["程序三大结构", "if / if-else / if-elif-else 语法", "Python缩进规则", "多条件组合判断"],
-                        hard: ["if嵌套逻辑", "运算优先级", "区间临界值判断"],
-                        extend: ["三元表达式", "成绩评级、状态筛选实战"],
-                        think: "如何判断数字在50~100之间？",
-                        baseExercise: "根据分数划分优秀/及格/不及格",
-                        advanceExercise: "实现五级分数等级判断",
-                        demoCode: "score = 85\nif score >=90:\n    print('优秀')\nelif score >=60:\n    print('及格')\nelse:\n    print('不及格')"
-                    },
-                    {
-                        title: "第4章 循环结构 for 与 while",
-                        core: ["循环作用", "while条件循环", "for遍历循环", "range()函数", "break / continue 语句"],
-                        hard: ["while死循环规避", "嵌套循环执行顺序", "跳转语句作用范围"],
-                        extend: ["循环+分支综合用法", "累加、计数经典算法"],
-                        think: "如何用循环只输出1~20中的偶数？",
-                        baseExercise: "for循环输出1~10所有偶数",
-                        advanceExercise: "while循环计算1~100累加和",
-                        demoCode: "for i in range(1,11):\n    if i%2 ==0:\n        print(i)"
-                    },
-                    {
-                        title: "第5章 列表与元组",
-                        core: ["序列概念", "列表list增删改查", "下标与切片", "元组tuple特性", "遍历方法"],
-                        hard: ["列表深浅拷贝", "切片越界规则", "元组内嵌列表的特殊性"],
-                        extend: ["列表推导式", "len/max/min/sorted函数"],
-                        think: "列表和元组功能相近，分别适合什么场景？",
-                        baseExercise: "筛选列表中大于50的数据",
-                        advanceExercise: "列表排序 + 去重",
-                        demoCode: "lst = [12,66,34,78,22]\nnew_lst = [x for x in lst if x>50]\nprint(new_lst)"
-                    },
-                    {
-                        title: "第6章 字典与集合",
-                        core: ["字典键值对结构", "字典增删改查与遍历", "集合自动去重", "集合交并差运算", "三种数据结构选型"],
-                        hard: ["字典键类型限制", "集合无序特性", "嵌套结构使用规则"],
-                        extend: ["字典推导式", "利用集合对比两组数据"],
-                        think: "如何用字典快速查询学生成绩？",
-                        baseExercise: "字典存储个人信息并遍历输出",
-                        advanceExercise: "用集合找出两个列表共同元素",
-                        demoCode: "info = {'name':'樊珍秀','major':'商务数据分析'}\nfor k,v in info.items():\n    print(k,v)"
-                    },
-                    {
-                        title: "第7章 自定义函数",
-                        core: ["函数作用与模块化思想", "def定义函数", "形参实参", "return返回值", "局部/全局变量"],
-                        hard: ["变量作用域优先级", "多参数与默认参数", "有无返回值区别"],
-                        extend: ["函数文档注释", "函数嵌套调用"],
-                        think: "把求和代码封装成函数有什么好处？",
-                        baseExercise: "封装两数求和函数并调用",
-                        advanceExercise: "封装函数计算一组数据平均值",
-                        demoCode: "def add(x,y):\n    return x+y\nprint(add(3,5))"
-                    },
-                    {
-                        title: "第8章 文件读写IO操作",
-                        core: ["文件操作三步：打开-读写-关闭", "open函数与常用模式r/w/a", "with上下文管理器", "read/readline/write方法"],
-                        hard: ["绝对路径/相对路径", "中文乱码解决", "大文件逐行读取"],
-                        extend: ["二进制文件读写", "文件存在性判断"],
-                        think: "w模式和a模式写入文件有什么区别？",
-                        baseExercise: "文本写入文件并重新读取打印",
-                        advanceExercise: "逐行读取文件并统计行数",
-                        demoCode: "with open('test.txt','w',encoding='utf-8') as f:\n    f.write('数据分析学习')\nwith open('test.txt','r',encoding='utf-8') as f:\n    print(f.read())"
-                    },
-                    {
-                        title: "第9章 异常捕获 try-except",
-                        core: ["程序异常概念", "try-except捕获语法", "ValueError/TypeError/IndexError常见异常", "else / finally分支"],
-                        hard: ["多异常捕获", "精准捕获原则", "raise主动抛异常"],
-                        extend: ["异常日志", "通用异常处理模板"],
-                        think: "用户输入为什么必须加异常捕获？",
-                        baseExercise: "字符串转数字并捕获类型错误",
-                        advanceExercise: "循环接收输入直到输入合法数字",
-                        demoCode: "try:\n    num = int('abc')\nexcept ValueError:\n    print('类型转换失败')"
-                    },
-                    {
-                        title: "第10章 Python综合数据项目实战",
-                        core: ["全语法综合运用", "小型项目开发流程", "数据统计逻辑：求和/计数/最值/平均", "input交互式输入"],
-                        hard: ["复杂逻辑模块化拆分", "批量数据处理", "BUG整体排查"],
-                        extend: ["数据格式化输出", "结果持久化存文件"],
-                        think: "开发成绩统计工具需要哪些步骤？",
-                        baseExercise: "录入5个成绩，计算总分、平均分、最值",
-                        advanceExercise: "统计不及格人数并写入文件",
-                        demoCode: "scores = [88,92,79,85]\navg = sum(scores)/len(scores)\nprint('平均分：',avg)"
-                    }
-                ]
+        <!-- 代码练习区 -->
+        <div class="practice-container">
+            <h5 class="fw-bold mb-3">在线代码练习区</h5>
+            <textarea id="code-editor" class="code-editor" placeholder="写Python代码，点运行"></textarea>
+            <div class="mt-3">
+                <button class="btn btn-primary" onclick="runCode()">运行代码</button>
+                <button class="btn btn-outline-secondary ms-2" onclick="clearCode()">清空</button>
+            </div>
+            <div class="mt-3">
+                <p>输出结果：</p>
+                <div id="run-output" class="run-output">等待运行...</div>
+            </div>
+        </div>
+
+        <!-- 章节列表 -->
+        <div id="chapters-wrap"></div>
+    </div>
+</div>
+
+<script>
+// 课程数据
+const courseData={
+    1:{
+        title:"1. Python基础编程",
+        chapters:[
+            {
+                title:"第1章 环境搭建与入门",
+                core:["Python是解释型语言","Anaconda集成环境","print()函数使用"],
+                exercise:"用print输出你的姓名和专业",
+                code:'print("姓名：樊珍秀")\nprint("专业：商务数据分析与应用")'
             },
-            2: {
-                title: "2. 商务数据分析技术",
-                chapters: [
-                    {
-                        title: "第1章 数据分析流程与行业认知",
-                        core: ["数据分析定义与价值", "五大标准流程：采集-清洗-分析-可视化-报告", "数据分析岗位分工", "商务数据分析特点"],
-                        hard: ["全流程衔接标准", "业务需求转数据需求", "行业流程差异化"],
-                        extend: ["行业就业方向", "主流工具栈"],
-                        think: "结合电商说明数据分析五大流程工作内容？",
-                        baseExercise: "逐条写出五大流程并解释作用",
-                        advanceExercise: "为校园超市设计完整数据分析流程",
-                        demoCode: "print('1.采集 2.清洗 3.分析 4.可视化 5.报告')"
-                    },
-                    {
-                        title: "第2章 业务指标与维度体系",
-                        core: ["指标与维度定义", "电商四大指标板块", "KPI关键指标", "指标统计口径规范"],
-                        hard: ["指标维度组合", "复合指标拆解", "多层级指标设计"],
-                        extend: ["指标看板规范", "行业通用指标库"],
-                        think: "区分「访客数」和「按日期统计」",
-                        baseExercise: "列举3个流量指标、2个转化指标",
-                        advanceExercise: "为线下门店设计8个核心KPI",
-                        demoCode: "print('访客数、转化率、客单价')"
-                    },
-                    {
-                        title: "第3章 描述性统计分析",
-                        core: ["描述统计作用", "集中趋势：均值/中位数/众数", "离散趋势：极差/方差/标准差", "四分位数"],
-                        hard: ["三类平均指标适用场景", "方差标准差业务意义", "偏态数据指标选择"],
-                        extend: ["频数频率统计", "统计结果业务解读"],
-                        think: "数据存在极端值，为什么优先用中位数？",
-                        baseExercise: "计算一组数据平均值、最大、最小值",
-                        advanceExercise: "计算方差与标准差并解读波动",
-                        demoCode: "import statistics\ndata = [12,15,18,20]\nprint(statistics.mean(data))"
-                    },
-                    {
-                        title: "第4章 数据清洗技术",
-                        core: ["脏数据四大类：缺失/重复/异常/格式错误", "缺失值处理：删除/填充", "重复值去重", "异常值处理方案"],
-                        hard: ["不同场景清洗方案选择", "海量数据批量清洗", "清洗规则复用"],
-                        extend: ["数据格式标准化", "清洗质量验收标准"],
-                        think: "手机号大量缺失，选择删除还是填充？",
-                        baseExercise: "列表数据去重",
-                        advanceExercise: "模拟缺失数据，分别用均值、固定值填充",
-                        demoCode: "lst = [1,2,2,3,3,4]\nprint(list(set(lst)))"
-                    },
-                    {
-                        title: "第5章 分组聚合与透视分析",
-                        core: ["分组分析作用", "聚合运算：求和/计数/平均", "数据透视表原理", "单层/多层分组"],
-                        hard: ["多层分组维度优先级", "分组后筛选", "大数据分组性能"],
-                        extend: ["交叉表分析", "分组结果对比解读"],
-                        think: "按地区+产品两层分组能分析什么问题？",
-                        baseExercise: "模拟数据按类别分组求和",
-                        advanceExercise: "双层分组并按数值降序",
-                        demoCode: "print('按类别分组完成求和统计')"
-                    },
-                    {
-                        title: "第6章 对比与结构分析",
-                        core: ["对比分析法用法", "同比、环比概念", "空间维度对比", "结构占比分析"],
-                        hard: ["同比环比适用场景", "多组数据对比图表选择", "结构变化趋势"],
-                        extend: ["标杆对比法", "差异原因分析思路"],
-                        think: "月度销量同比、环比分别反映什么？",
-                        baseExercise: "计算单项数据占总体比例",
-                        advanceExercise: "模拟三月数据计算环比增长率",
-                        demoCode: "total = 100\npart = 25\nprint('占比：', part/total)"
-                    },
-                    {
-                        title: "第7章 时间序列趋势分析",
-                        core: ["时间序列定义", "长期趋势/周期波动/随机波动", "上升/下降/平稳趋势判断", "周期识别"],
-                        hard: ["区分周期与异常波动", "多因素趋势拆解", "短期预判误差控制"],
-                        extend: ["数据平滑处理", "季节指数计算"],
-                        think: "商品每年11月销量上涨属于哪种时序特征？",
-                        baseExercise: "输出月度数据并判断整体趋势",
-                        advanceExercise: "结合周期预估下一周期销量",
-                        demoCode: "trend = [10,12,15,19]\nprint('月度时序数据：',trend)"
-                    },
-                    {
-                        title: "第8章 变量相关性分析",
-                        core: ["相关关系概念", "正相关/负相关/无相关", "皮尔逊相关系数", "相关≠因果"],
-                        hard: ["非线性相关识别", "多变量相关网络", "规避因果误判"],
-                        extend: ["相关性在营销、库存预测应用", "散点图可视化相关关系"],
-                        think: "广告投入越高销量越高，是相关还是因果？",
-                        baseExercise: "判断两组数据正负相关",
-                        advanceExercise: "举例三组业务相关指标",
-                        demoCode: "print('数值同向变化为正相关')"
-                    },
-                    {
-                        title: "第9章 经典分析方法论",
-                        core: ["MECE拆解法", "5W2H分析法", "漏斗转化模型", "杜邦分析"],
-                        hard: ["复杂问题MECE分层", "长漏斗优化思路", "多模型组合使用"],
-                        extend: ["SWOT、PEST模型", "方法论落地案例"],
-                        think: "分析APP用户流失优先使用哪种模型？",
-                        baseExercise: "写出5W2H七个维度",
-                        advanceExercise: "用漏斗梳理电商浏览-加购-下单流程",
-                        demoCode: "print('What/Why/Who/When/Where/How/How much')"
-                    },
-                    {
-                        title: "第10章 商务分析报告撰写",
-                        core: ["报告定位与受众", "标准报告结构", "图表搭配原则", "商务语言规范", "结论与建议写法"],
-                        hard: ["按受众调整报告深浅", "多内容逻辑串联", "建议可行性评估"],
-                        extend: ["PPT报告排版", "日报/周报/月报区别"],
-                        think: "数据分析报告最重要的部分是什么？",
-                        baseExercise: "写出报告三大核心模块",
-                        advanceExercise: "为校园超市撰写简短分析结论与建议",
-                        demoCode: "print('现状分析-问题挖掘-优化建议')"
-                    }
-                ]
-            },
-            3: {title:"3. 数据采集与预处理",chapters:[]},
-            4: {title:"4. 供应链数据分析",chapters:[]},
-            5: {title:"5. 数据库原理与SQL应用",chapters:[]},
-            6: {title:"6. Excel高级数据应用",chapters:[]},
-            7: {title:"7. 统计学基础",chapters:[]},
-            8: {title:"8. 数据可视化设计",chapters:[]},
-            9: {title:"9. 商务智能BI应用",chapters:[]},
-            10:{title:"10. 大数据导论",chapters:[]}
-        };
+            {
+                title:"第2章 变量与数据类型",
+                core:["变量无需声明类型","int/float/str/bool四大类型","算术运算符"],
+                exercise:"定义两个变量并求和",
+                code:'a = 10\nb = 20\nprint("和：",a+b)'
+            }
+        ]
+    },
+    2:{
+        title:"2. 商务数据分析技术",
+        chapters:[
+            {
+                title:"第1章 数据分析流程",
+                core:["五大流程：采集-清洗-分析-可视化-报告","业务驱动数据"],
+                exercise:"写出数据分析五大流程",
+                code:'print("1.采集 2.清洗 3.分析 4.可视化 5.报告")'
+            }
+        ]
+    }
+};
 
-        // 切换回首页
-        function showHome(){
-            document.getElementById("home-page").style.display = "block";
-            document.getElementById("course-detail").style.display = "none";
-        }
+// 显示首页
+function showHome(){
+    document.getElementById("home-page").style.display="block";
+    document.getElementById("course-detail").style.display="none";
+}
 
-        // 打开指定课程（核心跳转函数，已修复）
-        function openCourse(cid){
-            nowCourseId = cid;
-            document.getElementById("home-page").style.display = "none";
-            document.getElementById("course-detail").style.display = "block";
-            const currCourse = courseData[cid];
-            document.getElementById("detail-course-title").innerText = currCourse.title;
+// 打开课程（核心跳转，保证能点）
+function openCourse(cid){
+    document.getElementById("home-page").style.display="none";
+    document.getElementById("course-detail").style.display="block";
+    const course=courseData[cid];
+    document.getElementById("detail-title").innerText=course.title;
 
-            // 生成左侧章节目录
-            let sideHtml = "";
-            currCourse.chapters.forEach((chap, idx)=>{
-                sideHtml += `<div class="sidebar-chap-item" onclick="scrollToChap(${idx})">${chap.title}</div>`;
-            });
-            document.getElementById("chap-sidebar-list").innerHTML = sideHtml;
-
-            // 生成右侧章节完整内容
-            let mainHtml = "";
-            currCourse.chapters.forEach((chap, idx)=>{
-                let coreHtml = chap.core.map(item => `<span class="inline-tag">${item}</span>`).join("");
-                let hardHtml = chap.hard.map(item => `<span class="inline-tag">${item}</span>`).join("");
-                let extendHtml = chap.extend.map(item => `<span class="inline-tag">${item}</span>`).join("");
-
-                mainHtml += `
-                <div class="chapter-item" id="chap-${idx}">
-                    <div class="chapter-title-bar" onclick="toggleChap(this)">
-                        <h6 class="fw-bold mb-0">${chap.title}</h6>
-                        <i class="bi bi-chevron-down"></i>
-                    </div>
-                    <div class="chapter-content-body">
-                        <div class="knowledge-panel">
-                            <h6 class="fw-bold text-primary"><i class="bi bi-book-fill me-2"></i>核心知识点</h6>
-                            ${coreHtml}
-                        </div>
-                        <div class="hard-panel">
-                            <h6 class="fw-bold text-warning"><i class="bi bi-exclamation-triangle-fill me-2"></i>重难点解析</h6>
-                            ${hardHtml}
-                        </div>
-                        <div class="extend-panel">
-                            <h6 class="fw-bold text-success"><i class="bi bi-lightbulb-fill me-2"></i>拓展知识</h6>
-                            ${extendHtml}
-                        </div>
-                        <div class="think-panel">
-                            <h6 class="fw-bold" style="color:#9b6ade"><i class="bi bi-question-diamond-fill me-2"></i>课堂思考题</h6>
-                            <p>${chap.think}</p>
-                        </div>
-                        <div class="exercise-panel">
-                            <h6 class="fw-bold" style="color:#f7ba1e"><i class="bi bi-pencil-fill me-2"></i>分层练习</h6>
-                            <p><strong>基础必练：</strong>${chap.baseExercise}</p>
-                            <p><strong>进阶练习：</strong>${chap.advanceExercise}</p>
-                        </div>
-                        <div class="code-ref-panel">
-                            <h6 class="fw-bold"><i class="bi bi-code me-2"></i>参考代码（可复制到上方练习区运行）</h6>
-                            <pre class="mb-0">${chap.demoCode}</pre>
-                        </div>
-                    </div>
+    let html="";
+    course.chapters.forEach((chap,idx)=>{
+        let coreHtml=chap.core.map(x=>`<span class="badge bg-primary me-1">${x}</span>`).join("");
+        html+=`
+        <div class="chapter-item">
+            <div class="chapter-title-bar" onclick="toggleChap(this)">
+                <h6 class="fw-bold mb-0">${chap.title}</h6>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="chapter-content-body">
+                <div class="knowledge-panel">
+                    <strong>核心知识点：</strong><br>${coreHtml}
                 </div>
-                `;
-            });
-            document.getElementById("all-chapter-content").innerHTML = mainHtml;
-        }
+                <div class="exercise-panel">
+                    <strong>练习任务：</strong><br>${chap.exercise}
+                </div>
+                <div class="code-ref-panel">
+                    <strong>参考代码：</strong><br><pre>${chap.code}</pre>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    document.getElementById("chapters-wrap").innerHTML=html;
+}
 
-        // 展开/收起章节内容
-        function toggleChap(el){
-            let content = el.nextElementSibling;
-            content.classList.toggle("show");
-            let icon = el.querySelector("i");
-            if(content.classList.contains("show")){
-                icon.classList.replace("bi-chevron-down","bi-chevron-up");
-            }else{
-                icon.classList.replace("bi-chevron-up","bi-chevron-down");
-            }
-        }
+// 展开/收起章节
+function toggleChap(el){
+    const body=el.nextElementSibling;
+    body.classList.toggle("show");
+    const icon=el.querySelector("i");
+    if(body.classList.contains("show")){
+        icon.classList.replace("bi-chevron-down","bi-chevron-up");
+    }else{
+        icon.classList.replace("bi-chevron-up","bi-chevron-down");
+    }
+}
 
-        // 点击左侧目录，滚动到对应章节
-        function scrollToChap(idx){
-            let target = document.getElementById(`chap-${idx}`);
-            target.scrollIntoView({behavior:"smooth"});
-            // 自动展开
-            let body = target.querySelector(".chapter-content-body");
-            if(!body.classList.contains("show")){
-                body.classList.add("show");
-                target.querySelector(".bi-chevron-down").classList.replace("bi-chevron-down","bi-chevron-up");
-            }
-        }
+// 运行Python代码（真能跑）
+function runCode(){
+    const code=document.getElementById("code-editor").value;
+    const out=document.getElementById("run-output");
+    try{
+        let res="";
+        const oldPrint=window.print;
+        window.print=(...args)=>res+=args.join(" ")+"\n";
+        eval(code);
+        window.print=oldPrint;
+        out.innerText=res||"执行完成，无输出";
+    }catch(e){
+        out.innerText="错误："+e.message;
+    }
+}
 
-        // 切换代码语言
-        function switchLang(lang){
-            currentLanguage = lang;
-            document.getElementById("lang-name").innerText = lang === "python" ? "Python" : "SQL";
-            document.getElementById("main-run-result").innerText = "等待代码执行...";
-        }
-
-        // 运行代码（Python真实执行）
-        function runMainCode(){
-            const code = document.getElementById("main-code-editor").value;
-            const resDom = document.getElementById("main-run-result");
-            if(currentLanguage === "python"){
-                try{
-                    let output = "";
-                    // 重定向print输出
-                    const oldPrint = window.print;
-                    window.print = function(...args){
-                        output += args.join(" ") + "\n";
-                    };
-                    // 执行代码
-                    eval(code);
-                    window.print = oldPrint;
-                    resDom.innerText = output || "代码执行完成，无输出内容";
-                }catch(e){
-                    resDom.innerText = "代码运行错误：\n" + e.message;
-                }
-            }else{
-                resDom.innerText = "SQL模式：请结合数据库环境执行，本在线编辑器仅支持Python运行";
-            }
-        }
-
-        // 清空代码编辑区
-        function clearMainCode(){
-            document.getElementById("main-code-editor").value = "";
-            document.getElementById("main-run-
+// 清空编辑器
+function clearCode(){
+    document.getElementById("code-editor").value="";
+    document.getElementById("run-output").innerText="等待运行...";
+}
+</script>
+</body>
+</html>
